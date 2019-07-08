@@ -41,7 +41,7 @@ export class DiagramEditorComponent implements OnInit {
     this.diagram.initialContentAlignment = go.Spot.Center;
     this.diagram.allowDrop = true;
     this.diagram.undoManager.isEnabled = true;
-    // this.diagram.hoverDelay = 10;
+    this.diagram.hoverDelay = 100;
     this.diagram.toolManager.draggingTool = new GuidedDraggingTool();
     this.diagram.addDiagramListener("ChangedSelection",
       e => {
@@ -74,44 +74,72 @@ export class DiagramEditorComponent implements OnInit {
             }
           }),
         $("Button",
-          { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right },
+          // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
+          {
+            alignment: go.Spot.Left,
+            alignmentFocus: go.Spot.Right,
+            "ButtonBorder.fill": "#007bff",
+            "ButtonBorder.stroke": "#007bff",
+            "_buttonFillOver": "#007bff",
+            "_buttonStrokeOver": "#007bff",
+            cursor: "pointer",
+            width: 80,
+
+          },
           {
             click: function (e, obj) {
               console.log("prashant", e, obj.part.jb.key);
               console.log("Email Subscription");
-              that.typeOfNode.emit({ key: obj.part.jb.key, sss: 'email' })
+              that.typeOfNode.emit({ key: obj.part.jb.key, name: 'email' })
             }
           },
-          $(go.TextBlock, "Email Sub")),
+          $(go.TextBlock, "Email Sub", {
+            stroke: '#fff',
+            margin: 2,
+          })),
         $("Button",
-          { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
+          // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
+          {
+            alignment: go.Spot.Right,
+            alignmentFocus: go.Spot.Left,
+            "ButtonBorder.fill": "#007bff",
+            "ButtonBorder.stroke": "#007bff",
+            "_buttonFillOver": "#007bff",
+            "_buttonStrokeOver": "#007bff",
+            cursor: "pointer",
+            width: 100,
+
+          },
           {
             click: function (e, obj) {
               console.log("Demographics");
-              that.typeOfNode.emit({ key: obj.part.jb.key, sss: 'demographics' })
+              that.typeOfNode.emit({ key: obj.part.jb.key, name: 'demographics' })
             }
           },
-          $(go.TextBlock, "Demographics"))
+          $(go.TextBlock, "Demographics", {
+            stroke: '#fff',
+            margin: 2,
+          }))
       );
 
 
 
     this.diagram.nodeTemplate =
-      $(go.Node, "Horizontal", { background: "#DD4814" },
-        // $(go.Shape, "RoundedRectangle"),
+      $(go.Node, "Horizontal", { background: "lightblue" },
+        // $(go.Shape, "RoundedRectangle", { strokeWidth: 0 }),
 
         {
           click: (e, node: any) => {
             console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
-            // this.openDialog(node.data);
+            this.openDialog(node.data);
           }
         },
         new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
         $(go.Picture,
-          { margin: 10, width: 50, height: 50, background: "red" },
+          { margin: 10, width: 50, height: 50, background: "white" },
           new go.Binding("source")), // this line is important for data binding to work
         $(go.TextBlock,
-          { margin: 8 /*, editable: true*/ },
+          { margin: 8/*, editable: true */ },
           new go.Binding("text", "name")/*.makeTwoWay()*/),
         { // show the Adornment when a mouseHover event occurs
           mouseHover: function (e, obj) {
@@ -119,7 +147,10 @@ export class DiagramEditorComponent implements OnInit {
             nodeHoverAdornment.adornedObject = node;
             node.addAdornment("mouseHover", nodeHoverAdornment);
           }
-        }
+        },
+        $("TreeExpanderButton",
+          { alignment: go.Spot.MiddleBottom, alignmentFocus: go.Spot.Top },
+          { visible: true })
       );
 
     // var simpletemplate = $(go.Node, "Spot",
