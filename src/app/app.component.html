@@ -1,7 +1,8 @@
 <div>
   Click on a node to edit its text or change its color.
-  <app-diagram-editor [model]="model" (typeOfNode)="qwerty1($event)" (nodeSelected)="qwerty($event)">
-  </app-diagram-editor>
+   <app-diagram-editor [model]="model" (typeOfNode)="addNode($event)" >
+  </app-diagram-editor>  
+  <app-ivr [model]="modelIVR" (typeOfNode)="addNode($event)"></app-ivr>
 </div>
 
 <!-- <button (click)="someFunc()">aaaa</button> -->
