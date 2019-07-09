@@ -144,6 +144,28 @@ export class IvrComponent implements OnInit {
                 )
             );
 
+        // This method is called as a context menu button's click handler.
+        // Rotate the selected node's color through a predefined sequence of colors.
+        function changeColor(e, obj) {
+            this.diagram.commit(function (d) {
+                // get the context menu that holds the button that was clicked
+                var contextmenu = obj.part;
+                // get the node data to which the Node is data bound
+                var nodedata = contextmenu.data;
+                // compute the next color for the node
+                var newcolor = "lightblue";
+                switch (nodedata.color) {
+                    case "lightblue": newcolor = "lightgreen"; break;
+                    case "lightgreen": newcolor = "lightyellow"; break;
+                    case "lightyellow": newcolor = "orange"; break;
+                    case "orange": newcolor = "lightblue"; break;
+                }
+                // modify the node data
+                // this evaluates data Bindings and records changes in the UndoManager
+                d.model.set(nodedata, "color", newcolor);
+            }, "changed color");
+        }
+
         this.diagram.nodeTemplate = $(go.Node, "Vertical",
             { selectionObjectName: "BODY" },
             {
@@ -214,9 +236,55 @@ export class IvrComponent implements OnInit {
                     nodeHoverAdornment.adornedObject = node;
                     node.addAdornment("mouseHover", nodeHoverAdornment);
                 }
+            },
+            {
+                contextMenu:     // define a context menu for each node
+                    $("ContextMenu",  // that has one button
+                        $("ContextMenuButton",
+                            $(go.TextBlock, ""),
+                            { click: changeColor }),
+                            $("ContextMenuButton",
+                            $(go.TextBlock, "Email"),
+                            ),
+                            $("ContextMenuButton",
+                            $(go.TextBlock, "Demographics"),
+                            ),
+                        // more ContextMenuButtons would go here
+                    )  // end Adornment
             }
 
         );
+
+        // also define a context menu for the diagram's background
+        this.diagram.contextMenu =
+            $("ContextMenu",
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Undo"),
+                    { click: function (e, obj) { e.diagram.commandHandler.undo(); } },
+                    new go.Binding("visible", "", function (o) {
+                        return o.diagram.commandHandler.canUndo();
+                    }).ofObject()),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Redo"),
+                    { click: function (e, obj) { e.diagram.commandHandler.redo(); } },
+                    new go.Binding("visible", "", function (o) {
+                        return o.diagram.commandHandler.canRedo();
+                    }).ofObject()),
+                // no binding, always visible button:
+                $("ContextMenuButton",
+                    $(go.TextBlock, "New Node"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commit(function (d) {
+                                var data = {};
+                                d.model.addNodeData(data);
+                                //part = d.findPartForData(data);  // must be same data reference, not a new {}
+                                // set location to saved mouseDownPoint in ContextMenuTool
+                               // part.location = d.toolManager.contextMenuTool.mouseDownPoint;
+                            }, 'new node');
+                        }
+                    })
+            );
 
         // define a second kind of Node:
         this.diagram.nodeTemplateMap.add("Terminal",
@@ -430,6 +498,7 @@ export class IvrComponent implements OnInit {
     }
 
     openDialog(data: any): void {
+        console.log("inside open dialog", data);
         const dialogRef = this.dialog.open(ModalComponent, {
             width: '250px',
             data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
@@ -438,11 +507,15 @@ export class IvrComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.diagram.model.commit(function (m) {
-                    m.set(data, "text", result.text);
-                    m.set(data, "color", result.color);
-                    m.set(data, "spending", result.spending);
+                    console.log("m", m);
+                    m.set(data, "income", result.income);
+                    // m.set(data, "color", result.color);
+                    // m.set(data, "spending", result.spending);
                 }, "modified node properties");
+                data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
             }
+            console.log("inside open dialog after", data);
         });
+
     }
 }
