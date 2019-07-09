@@ -143,12 +143,20 @@ export class IvrComponent implements OnInit {
                     new go.Binding("text")
                 )
             );
+
         this.diagram.nodeTemplate = $(go.Node, "Vertical",
             { selectionObjectName: "BODY" },
+            {
+                click: (e, node: any) => {
+                    console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+                    //check for bottomsheet
+                    this.openDialog(node.data);
+                }
+            },
             // the main "BODY" consists of a RoundedRectangle surrounding nested Panels
             $(go.Panel, "Auto",
                 { name: "BODY" },
-                $(go.Shape, "Rectangle",
+                $(go.Shape, "RoundedRectangle",
                     { fill: bluegrad, stroke: null }
                 ),
                 $(go.Panel, "Vertical",
@@ -184,7 +192,7 @@ export class IvrComponent implements OnInit {
                         $(go.Panel, "Vertical",
                             {
                                 name: "COLLAPSIBLE",  // identify to the PanelExpanderButton
-                                padding: 2,
+                                padding: 10,
                                 stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 background: "white",  // to distinguish from the node's body
                                 defaultAlignment: go.Spot.Left,  // thus no need to specify alignment on each element
@@ -198,7 +206,16 @@ export class IvrComponent implements OnInit {
             $(go.Panel,  // this is underneath the "BODY"
                 { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
                 $("TreeExpanderButton")
-            )
+            ),
+            {
+                // show the Adornment when a mouseHover event occurs
+                mouseHover: function (e, obj) {
+                    var node = obj.part;
+                    nodeHoverAdornment.adornedObject = node;
+                    node.addAdornment("mouseHover", nodeHoverAdornment);
+                }
+            }
+
         );
 
         // define a second kind of Node:
