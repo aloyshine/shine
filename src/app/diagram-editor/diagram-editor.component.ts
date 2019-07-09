@@ -12,13 +12,13 @@ import { ModalComponent } from '../modal/modal.component';
 })
 export class DiagramEditorComponent implements OnInit {
   private diagram: go.Diagram = new go.Diagram();
-  private palette: go.Palette = new go.Palette();
+  // private palette: go.Palette = new go.Palette();
 
   @ViewChild('diagramDiv')
   private diagramRef: ElementRef;
 
-  @ViewChild('paletteDiv')
-  private paletteRef: ElementRef;
+  // @ViewChild('paletteDiv')
+  // private paletteRef: ElementRef;
 
   @Input()
   get model(): go.Model { return this.diagram.model; }
@@ -41,7 +41,7 @@ export class DiagramEditorComponent implements OnInit {
     this.diagram.initialContentAlignment = go.Spot.Center;
     this.diagram.allowDrop = true;
     this.diagram.undoManager.isEnabled = true;
-    this.diagram.hoverDelay = 100;
+    // this.diagram.hoverDelay = 100;
     this.diagram.toolManager.draggingTool = new GuidedDraggingTool();
     this.diagram.addDiagramListener("ChangedSelection",
       e => {
@@ -88,9 +88,9 @@ export class DiagramEditorComponent implements OnInit {
           },
           {
             click: function (e, obj) {
-              console.log("prashant", e, obj.part.jb.key);
+              console.log("prashant", e, obj.part.key);
               console.log("Email Subscription");
-              that.typeOfNode.emit({ key: obj.part.jb.key, name: 'email' })
+              that.typeOfNode.emit({ key: obj.part.key, name: 'email' })
             }
           },
           $(go.TextBlock, "Email Sub", {
@@ -113,7 +113,7 @@ export class DiagramEditorComponent implements OnInit {
           {
             click: function (e, obj) {
               console.log("Demographics");
-              that.typeOfNode.emit({ key: obj.part.jb.key, name: 'demographics' })
+              that.typeOfNode.emit({ key: obj.part.key, name: 'demographics' })
             }
           },
           $(go.TextBlock, "Demographics", {
@@ -123,25 +123,43 @@ export class DiagramEditorComponent implements OnInit {
       );
 
 
+    this.diagram.nodeTemplate = $(go.Node, "Auto",
+      $(go.Panel, "Auto",
+        $(go.Shape, "RoundedRectangle", { fill: "white" }),
+        $(go.Panel, "Table",
+          {
+            // defaultRowSeparatorStroke: "black",
+            // defaultColumnSeparatorStroke: "black",
+            defaultSeparatorPadding: 10
+          },
 
-    this.diagram.nodeTemplate =
-      $(go.Node, "Horizontal", { background: "lightblue" },
-        // $(go.Shape, "RoundedRectangle", { strokeWidth: 0 }),
+          //Row 0
+          $(go.RowColumnDefinition, { row: 0, background: "dodgerblue" }),
+          $(go.Panel, "TableRow", { row: 0 },
+            $(go.Shape, "Triangle", { column: 0, desiredSize: new go.Size(10, 10), fill: "lime", alignment: go.Spot.Left }),
+            $(go.TextBlock, "Title", { column: 1, columnSpan: 2 }),
+            $(go.Shape, "Rectangle", { column: 3, desiredSize: new go.Size(10, 10), fill: "cyan", alignment: go.Spot.Right })
+          ),
 
+          //Row 1
+          $(go.RowColumnDefinition, { row: 1, separatorStroke: "black" }),
+          $(go.Panel, "TableRow", { row: 1 },
+            $(go.TextBlock, "(1,0)", { column: 0 }),
+            $(go.TextBlock, "(1,1)", { column: 1 }),
+            $(go.TextBlock, "(1,2)", { column: 2 }),
+            $(go.TextBlock, "(1,3)", { column: 3 }),
+          )
+        ),
+
+        // $(go.Picture,
+        //   { margin: 10, width: 50, height: 50, background: "white" },
+        //   new go.Binding("source")),
+
+        // $(go.TextBlock,
+        //   { margin: 8/*, editable: true */ },
+        //   new go.Binding("text", "name")/*.makeTwoWay()*/),
         {
-          click: (e, node: any) => {
-            console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
-            this.openDialog(node.data);
-          }
-        },
-        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-        $(go.Picture,
-          { margin: 10, width: 50, height: 50, background: "white" },
-          new go.Binding("source")), // this line is important for data binding to work
-        $(go.TextBlock,
-          { margin: 8/*, editable: true */ },
-          new go.Binding("text", "name")/*.makeTwoWay()*/),
-        { // show the Adornment when a mouseHover event occurs
+          // show the Adornment when a mouseHover event occurs
           mouseHover: function (e, obj) {
             var node = obj.part;
             nodeHoverAdornment.adornedObject = node;
@@ -151,7 +169,42 @@ export class DiagramEditorComponent implements OnInit {
         $("TreeExpanderButton",
           { alignment: go.Spot.MiddleBottom, alignmentFocus: go.Spot.Top },
           { visible: true })
-      );
+      ));
+
+
+    // this.diagram.nodeTemplate =
+    //   $(go.Node, "Horizontal",
+    //     { background: "lightblue" },
+    //     // $(go.Shape, "RoundedRectangle", { strokeWidth: 0 }),
+
+    //     {
+    //       click: (e, node: any) => {
+    //         console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+    //         //check for bottomsheet
+    //         this.openDialog(node.data);
+    //       }
+    //     },
+    //     new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+    //     $(go.Picture,
+    //       { margin: 10, width: 50, height: 50, background: "white" },
+    //       new go.Binding("source")), // this line is important for data binding to work
+    //     $(go.TextBlock,
+    //       { margin: 8/*, editable: true */ },
+    //       new go.Binding("text", "name")/*.makeTwoWay()*/),
+    //     $(go.TextBlock,
+    //       { margin: 8/*, editable: true */ },
+    //       new go.Binding("text", "name")/*.makeTwoWay()*/),
+    //     { // show the Adornment when a mouseHover event occurs
+    //       mouseHover: function (e, obj) {
+    //         var node = obj.part;
+    //         nodeHoverAdornment.adornedObject = node;
+    //         node.addAdornment("mouseHover", nodeHoverAdornment);
+    //       }
+    //     },
+    //     $("TreeExpanderButton",
+    //       { alignment: go.Spot.MiddleBottom, alignmentFocus: go.Spot.Top },
+    //       { visible: true })
+    //   );
 
     // var simpletemplate = $(go.Node, "Spot",
     //   $(go.Panel, "Auto",
@@ -203,18 +256,18 @@ export class DiagramEditorComponent implements OnInit {
         $(go.Shape, { strokeWidth: 3, stroke: "#555" })); // the link shape
 
 
-    this.palette = new go.Palette();
-    this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
+    // this.palette = new go.Palette();
+    // this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
 
     // initialize contents of Palette
-    this.palette.model.nodeDataArray =
-      [
-        { key: 1, text: "Alpha", color: "lightblue" },
-        { key: 2, text: "Beta", color: "orange" },
-        { key: 3, text: "Gamma", color: "lightgreen" },
-        { key: 4, text: "Delta", color: "pink" },
-        { key: 5, text: "Epsilon", color: "yellow" }
-      ];
+    // this.palette.model.nodeDataArray =
+    //   [
+    //     { key: 1, text: "Alpha", color: "lightblue" },
+    //     { key: 2, text: "Beta", color: "orange" },
+    //     { key: 3, text: "Gamma", color: "lightgreen" },
+    //     { key: 4, text: "Delta", color: "pink" },
+    //     { key: 5, text: "Epsilon", color: "yellow" }
+    //   ];
   }
 
   // this function changes the category of the node data to cause the Node to be replaced
@@ -294,7 +347,7 @@ export class DiagramEditorComponent implements OnInit {
 
   ngOnInit() {
     this.diagram.div = this.diagramRef.nativeElement;
-    this.palette.div = this.paletteRef.nativeElement;
+    // this.palette.div = this.paletteRef.nativeElement;
 
   }
 
