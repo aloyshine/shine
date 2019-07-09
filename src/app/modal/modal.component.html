@@ -4,10 +4,17 @@
   <mat-form-field>
     <input matInput [(ngModel)]="data.text">
   </mat-form-field>
+  Spending:
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.spending">
+  </mat-form-field>
+  <!-- <mat-form-field>
+    <input matInput [(ngModel)]="data.text">Medium Customers
+  </mat-form-field>
   color:
   <mat-form-field>
-    <input matInput [(ngModel)]="data.color">
-  </mat-form-field>
+    <input matInput [(ngModel)]="data.color">DIY Customers
+  </mat-form-field>  -->
 </div>
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="data" cdkFocusInitial>OK</button>

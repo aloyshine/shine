@@ -127,8 +127,9 @@ export class DiagramEditorComponent implements OnInit {
     this.diagram.nodeTemplate = $(go.Node, "Auto",
       {
         click: (e, node: any) => {
-          console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+          // console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
           //check for bottomsheet
+          console.log("node data", node.data);
           this.openDialog(node.data);
         }
       },
@@ -153,7 +154,7 @@ export class DiagramEditorComponent implements OnInit {
           //Row 1
           $(go.RowColumnDefinition, { row: 1, separatorStroke: "black" }),
           $(go.Panel, "TableRow", { row: 1 },
-            $(go.TextBlock, "(1,0)", { column: 0 }),
+            $(go.TextBlock, new go.Binding("text", "spending"), { column: 0 }),
             $(go.TextBlock, "(1,1)", { column: 1 }),
             $(go.TextBlock, "(1,2)", { column: 2 }),
             $(go.TextBlock, "(1,3)", { column: 3 }),
@@ -363,7 +364,7 @@ export class DiagramEditorComponent implements OnInit {
   openDialog(data: any): void {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '250px',
-      data: { key: data.key, text: data.text, color: data.color }
+      data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -371,6 +372,7 @@ export class DiagramEditorComponent implements OnInit {
         this.diagram.model.commit(function (m) {
           m.set(data, "text", result.text);
           m.set(data, "color", result.color);
+          m.set(data, "spending", result.spending);
         }, "modified node properties");
       }
     });
