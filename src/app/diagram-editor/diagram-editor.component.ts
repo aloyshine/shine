@@ -135,12 +135,12 @@ export class DiagramEditorComponent implements OnInit {
       },
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
       $(go.Panel, "Auto",
-        $(go.Shape, "RoundedRectangle", { fill: "white" }),
+        $(go.Shape, { fill: "white" }, new go.Binding("figure")),
         $(go.Panel, "Table",
           {
             // defaultRowSeparatorStroke: "black",
             // defaultColumnSeparatorStroke: "black",
-            defaultSeparatorPadding: 10
+            defaultSeparatorPadding: 8
           },
 
           //Row 0
@@ -154,10 +154,10 @@ export class DiagramEditorComponent implements OnInit {
           //Row 1
           $(go.RowColumnDefinition, { row: 1, separatorStroke: "black" }),
           $(go.Panel, "TableRow", { row: 1 },
-            $(go.TextBlock, new go.Binding("text", "spending"), { column: 0 }),
-            $(go.TextBlock, "(1,1)", { column: 1 }),
-            $(go.TextBlock, "(1,2)", { column: 2 }),
-            $(go.TextBlock, "(1,3)", { column: 3 }),
+            $(go.TextBlock, "spendings", { column: 0, columnSpan: 2 }),
+            $(go.TextBlock, new go.Binding("text", "spending"), { column: 1, columnSpan: 2 }),
+            // $(go.TextBlock, "(1,2)", { column: 2 }),
+            // $(go.TextBlock, "(1,3)", { column: 3 }),
           )
         ),
 
