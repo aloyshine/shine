@@ -27,9 +27,9 @@ export class AppComponent {
     {
       key: 1, question: "All Customers",
       actions: [
-        { text: "Sales", figure: "ElectricalHazard", fill: "green" },
-        { text: "Parts and Services", figure: "FireHazard", fill: "red" },
-        { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
+        // { text: "Sales", figure: "ElectricalHazard", fill: "green" },
+        // { text: "Parts and Services", figure: "FireHazard", fill: "red" },
+        // { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
       ],category:""
     },
     // {
@@ -179,5 +179,17 @@ export class AppComponent {
 
 
    
+  }
+
+
+  onSomeEvent(result){
+    console.log('ccc',result);
+    this.nodeDataArray.forEach((nodeItem) => {
+      if(nodeItem.key === result.key) {
+        nodeItem.actions  = result.actions;
+    this.modelIVR = new go.GraphLinksModel(this.nodeDataArray,this.linkDataArray);
+
+      }
+    })
   }
 }

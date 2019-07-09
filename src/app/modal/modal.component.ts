@@ -7,9 +7,17 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
   styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
+  country:string = 'India';
+  race:string = 'black';
+  gender:string = 'male';
+  income:number;
+
+
   constructor(
     public dialogRef: MatDialogRef<ModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+      console.log("constructor",data);
+    }
 
   ngOnInit() {
   }
