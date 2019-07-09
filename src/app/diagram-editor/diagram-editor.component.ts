@@ -34,6 +34,7 @@ export class DiagramEditorComponent implements OnInit {
   modelChanged = new EventEmitter<go.ChangedEvent>();
 
   constructor(public dialog: MatDialog) {
+
     const $ = go.GraphObject.make;
     // Place GoJS license key here:
     // (go as any).licenseKey = "..."
@@ -124,6 +125,14 @@ export class DiagramEditorComponent implements OnInit {
 
 
     this.diagram.nodeTemplate = $(go.Node, "Auto",
+      {
+        click: (e, node: any) => {
+          console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+          //check for bottomsheet
+          this.openDialog(node.data);
+        }
+      },
+      new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
       $(go.Panel, "Auto",
         $(go.Shape, "RoundedRectangle", { fill: "white" }),
         $(go.Panel, "Table",
@@ -137,7 +146,7 @@ export class DiagramEditorComponent implements OnInit {
           $(go.RowColumnDefinition, { row: 0, background: "dodgerblue" }),
           $(go.Panel, "TableRow", { row: 0 },
             $(go.Shape, "Triangle", { column: 0, desiredSize: new go.Size(10, 10), fill: "lime", alignment: go.Spot.Left }),
-            $(go.TextBlock, "Title", { column: 1, columnSpan: 2 }),
+            $(go.TextBlock, new go.Binding("text", "text"), { column: 1, columnSpan: 2 }),
             $(go.Shape, "Rectangle", { column: 3, desiredSize: new go.Size(10, 10), fill: "cyan", alignment: go.Spot.Right })
           ),
 
