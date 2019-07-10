@@ -21,6 +21,9 @@ export class IvrComponent implements OnInit {
     @ViewChild('diagramDiv')
     private diagramRef: ElementRef;
 
+    @ViewChild('g')
+    private inputRef: ElementRef;
+
     // @ViewChild('paletteDiv')
     // private paletteRef: ElementRef;
 
@@ -538,7 +541,7 @@ export class IvrComponent implements OnInit {
                 ),
                 $(go.TextBlock,
                     { font: "10pt Verdana, sans-serif" },
-                    new go.Binding("text")
+                    new go.Binding("text", "label")
                 ),
                 // {
                 //     // show the Adornment when a mouseHover event occurs
@@ -572,79 +575,11 @@ export class IvrComponent implements OnInit {
                     new go.Binding("visible", "answer", function (a) { return (a ? true : false); })
                 )
             );
-        // this.diagram.nodeTemplate =
-        //   $(go.Node, "Horizontal",
-        //     { background: "lightblue" },
-        //     // $(go.Shape, "RoundedRectangle", { strokeWidth: 0 }),
-
-        //     {
-        //       click: (e, node: any) => {
-        //         console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
-        //         //check for bottomsheet
-        //         this.openDialog(node.data);
-        //       }
-        //     },
-        //     new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-        //     $(go.Picture,
-        //       { margin: 10, width: 50, height: 50, background: "white" },
-        //       new go.Binding("source")), // this line is important for data binding to work
-        //     $(go.TextBlock,
-        //       { margin: 8/*, editable: true */ },
-        //       new go.Binding("text", "name")/*.makeTwoWay()*/),
-        //     $(go.TextBlock,
-        //       { margin: 8/*, editable: true */ },
-        //       new go.Binding("text", "name")/*.makeTwoWay()*/),
-        //     { // show the Adornment when a mouseHover event occurs
-        //       mouseHover: function (e, obj) {
-        //         var node = obj.part;
-        //         nodeHoverAdornment.adornedObject = node;
-        //         node.addAdornment("mouseHover", nodeHoverAdornment);
-        //       }
-        //     },
-        //     $("TreeExpanderButton",
-        //       { alignment: go.Spot.MiddleBottom, alignmentFocus: go.Spot.Top },
-        //       { visible: true })
-        //   );
-
-        // var simpletemplate = $(go.Node, "Spot",
-        //   $(go.Panel, "Auto",
-        //     $(go.Shape, "Ellipse",
-        //       new go.Binding("fill", "color")),
-        //     $(go.TextBlock,
-        //       new go.Binding("text", "key"))
-        //   ),
-        //   $("Button",
-        //     { alignment: go.Spot.TopRight },
-        //     $(go.Shape, "Ellipse", { width: 8, height: 8 }),
-        //     { click: this.changeCategory })
-        // );
 
 
-        // var detailtemplate =
-        //   $(go.Node, "Spot",
-        //     $(go.Panel, "Auto",
-        //       $(go.Shape, "RoundedRectangle",
-        //         new go.Binding("fill", "color")),
-        //       $(go.Panel, "Table",
-        //         { defaultAlignment: go.Spot.Left },
-        //         $(go.TextBlock, { row: 0, column: 0, columnSpan: 2, font: "bold 12pt sans-serif" },
-        //           new go.Binding("text", "key")),
-        //         $(go.TextBlock, { row: 1, column: 0 }, "Description:"),
-        //         $(go.TextBlock, { row: 1, column: 1 }, new go.Binding("text", "desc")),
-        //         $(go.TextBlock, { row: 2, column: 0 }, "Color:"),
-        //         $(go.TextBlock, { row: 2, column: 1 }, new go.Binding("text", "color"))
-        //       )
-        //     ),
-        //     $("Button",
-        //       { alignment: go.Spot.TopRight },
-        //       $(go.Shape, "Ellipse", { width: 8, height: 8 }),
-        //       { click: this.changeCategory })
-        //   );
 
-        // var templmap = new go.Map(); // In TypeScript you could write: new go.Map<string, go.Node>();
-        // templmap.add("simple", simpletemplate);
-        // templmap.add("detailed", detailtemplate);
-        // this.diagram.nodeTemplateMap = templmap;
+
+
 
         this.diagram.layout =
             $(go.TreeLayout,
@@ -686,64 +621,6 @@ export class IvrComponent implements OnInit {
     //   }
     // }
 
-    // ngOnChanges(changes: SimpleChanges): void {
-    //   //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //   //Add '${implements OnChanges}' to the class.
-
-    //   const $ = go.GraphObject.make;
-    //   // Place GoJS license key here:
-    //   // (go as any).licenseKey = "..."
-    //   this.diagram = new go.Diagram();
-    //   this.diagram.initialContentAlignment = go.Spot.Center;
-    //   this.diagram.allowDrop = true;
-    //   this.diagram.undoManager.isEnabled = true;
-    //   this.diagram.toolManager.draggingTool = new GuidedDraggingTool();
-    //   this.diagram.addDiagramListener("ChangedSelection",
-    //     e => {
-    //       console.log('changed selection')
-    //       const node = e.diagram.selection.first();
-    //       this.nodeSelected.emit(node instanceof go.Node ? node : null);
-    //     });
-    //   this.diagram.addModelChangedListener(e => e.isTransactionFinished && this.modelChanged.emit(e));
-
-    //   this.diagram.nodeTemplate =
-    //     $(go.Node, "Horizontal", { background: "#DD4814" },
-    //       {
-    //         click: (e, node: go.Node) => { this.openDialog(node.data); }
-    //       },
-    //       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-    //       $(go.Picture,
-    //         { margin: 10, width: 50, height: 50, background: "red" },
-    //         new go.Binding("source")), // this line is important for data binding to work
-    //       $(go.TextBlock,
-    //         { margin: 8 /*, editable: true*/ },
-    //         new go.Binding("text", "key")/*.makeTwoWay()*/)
-    //     );
-
-    //   this.diagram.layout =
-    //     $(go.TreeLayout,
-    //       { angle: 90, layerSpacing: 35 });
-
-    //   this.diagram.linkTemplate =
-    //     $(go.Link,
-    //       { routing: go.Link.Orthogonal, corner: 5 },
-    //       $(go.Shape, { strokeWidth: 3, stroke: "#555" })); // the link shape
-
-
-    //   this.palette = new go.Palette();
-    //   this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
-
-    //   // initialize contents of Palette
-    //   this.palette.model.nodeDataArray =
-    //     [
-    //       { key: 1, text: "Alpha", color: "lightblue" },
-    //       { key: 2, text: "Beta", color: "orange" },
-    //       { key: 3, text: "Gamma", color: "lightgreen" },
-    //       { key: 4, text: "Delta", color: "pink" },
-    //       { key: 5, text: "Epsilon", color: "yellow" }
-    //     ];
-
-    // }
 
     ngOnInit() {
         this.diagram.div = this.diagramRef.nativeElement;
@@ -877,7 +754,43 @@ export class IvrComponent implements OnInit {
     }
 
     openTerminalDialog(data) {
-        console.log("data in terminal", data)
+        // console.log("data in terminal", data);
         this.terminalevent.emit(data)
     }
+     csvJSON(csv) {
+        var lines = csv.split("\n");
+
+        var allCustomersArray = [];
+
+        var headers = lines[0].split(",");
+
+        for (var i = 1; i < lines.length; i++) {
+
+            var obj = {};
+            var currentline = lines[i].split(",");
+
+            for (var j = 0; j < headers.length; j++) {
+                obj[headers[j]] = currentline[j];
+            }
+
+            allCustomersArray.push(obj);
+            // console.log("json result",result);
+        }
+
+        //return result; //JavaScript object
+        return JSON.stringify(allCustomersArray); //JSON
+    }
+    convertFile(e){
+        const input = (<HTMLInputElement>document.getElementById('fileInput'))
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            let text = reader.result;
+            //   console.log('CSV: ', text.substring(0, 100) + '...');
+
+            //convert text to json here
+            var json = this.csvJSON(text);
+        };
+        reader.readAsText(input.files[0]);
+    };
 }
