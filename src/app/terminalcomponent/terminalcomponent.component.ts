@@ -18,21 +18,25 @@ export class TerminalcomponentComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
 
-    this.activityForm = new FormGroup({});
+    this.activityForm = new FormGroup({
+      // name: new FormControl('Benedict'),
+      // email: new FormControl(''),
+      // message: new FormControl('')
+    });
     this.activityForm.addControl('Operator', new FormControl())
     this.activityForm.addControl('leafNodes', new FormControl())
-    console.log(data)
+    console.log("line 28", data)
     this.linkdataArray = data['linkDataArray'];
     this.nodedataArray = data['nodeDataArray']
     this.nodedataArray.forEach(node => {
       let key = node.key
       let keyflag = false;
       this.linkdataArray.forEach(element => {
-        if ((element.from == key) || (element.category == "Terminal")) {
+        if ((element.from === key) || (element.category === "Terminal")) {
           keyflag = true
         }
       });
-      if (keyflag == false) {
+      if (keyflag === false) {
         this.finalnodes.push(node)
       }
     }
@@ -42,6 +46,10 @@ export class TerminalcomponentComponent implements OnInit {
 
 
   ngOnInit() {
+  }
+
+  onSubmit(f) {
+    console.log("form submit", f);
   }
 
 }

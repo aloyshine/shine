@@ -1,7 +1,8 @@
 <div>
-   <!-- <app-diagram-editor [model]="model" (typeOfNode)="addNode($event)" >
+  <!-- <app-diagram-editor [model]="model" (typeOfNode)="addNode($event)" >
   </app-diagram-editor>   -->
-  <app-ivr [model]="modelIVR" (terminalevent)="openterminaldialog($event)" (someEvent)="onSomeEvent($event)" (typeOfNode)="addIvrNode($event)"></app-ivr>
+  <app-ivr [model]="modelIVR" (terminalevent)="openterminaldialog($event)" (nodeMetrics)="onReceiveNodeMetrics($event)"
+    (typeOfNode)="addIvrNode($event)"></app-ivr>
 </div>
 
 <!-- <button (click)="someFunc()">aaaa</button> -->

@@ -38,7 +38,7 @@ export class IvrComponent implements OnInit {
     terminalevent = new EventEmitter<any>();
 
     @Output()
-    someEvent = new EventEmitter<any>();
+    nodeMetrics = new EventEmitter<any>();
 
     @Output()
     modelChanged = new EventEmitter<go.ChangedEvent>();
@@ -60,8 +60,9 @@ export class IvrComponent implements OnInit {
         this.diagram.toolManager.draggingTool = new GuidedDraggingTool();
         this.diagram.addDiagramListener("ChangedSelection",
             e => {
-                console.log('changed selection')
+                // console.log('changed selection', e);
                 const node = e.diagram.selection.first();
+                console.log('changed selection node', node.data);
                 // this.nodeSelected.emit(node.name);
             });
         this.diagram.addModelChangedListener(e => e.isTransactionFinished && this.modelChanged.emit(e));
@@ -114,6 +115,7 @@ export class IvrComponent implements OnInit {
         }
 
         function addTerminal(e, obj) {
+            console.log("uuu", obj);
             that.typeOfNode.emit({ key: obj.part.key, name: 'Terminal' })
         }
         // this is shown by the mouseHover event handler
@@ -760,8 +762,8 @@ export class IvrComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             console.log("result", result);
             result.actions.push({ text: result.country, fill: "green" })
-            console.log("final result", result);
-            this.someEvent.emit(result);
+            console.log("final result emitted", result);
+            this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
             //     this.diagram.model.commit(function (m) {
@@ -788,7 +790,7 @@ export class IvrComponent implements OnInit {
             console.log("result", result);
             result.actions.push({ text: result.purchase, fill: "red" })
             console.log("final result", result);
-            this.someEvent.emit(result);
+            this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
             //     this.diagram.model.commit(function (m) {
@@ -815,7 +817,7 @@ export class IvrComponent implements OnInit {
             console.log("result", result);
             result.actions.push({ text: result.customerengagement, fill: "lime" })
             console.log("final result", result);
-            this.someEvent.emit(result);
+            this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
             //     this.diagram.model.commit(function (m) {
@@ -845,7 +847,7 @@ export class IvrComponent implements OnInit {
             result.actions.push({ text: result.race, fill: "blue" })
             result.actions.push({ text: result.income, fill: "dodgerblue" })
             console.log("final result", result);
-            this.someEvent.emit(result);
+            this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
             //     this.diagram.model.commit(function (m) {
