@@ -538,14 +538,14 @@ export class IvrComponent implements OnInit {
                     { font: "10pt Verdana, sans-serif" },
                     new go.Binding("text")
                 ),
-                {
-                    // show the Adornment when a mouseHover event occurs
-                    mouseHover: function (e, obj) {
-                        var node = obj.part;
-                        terminalnodeAdornment.adornedObject = node;
-                        node.addAdornment("mouseHover", terminalnodeAdornment);
-                    }
-                },
+                // {
+                //     // show the Adornment when a mouseHover event occurs
+                //     mouseHover: function (e, obj) {
+                //         var node = obj.part;
+                //         terminalnodeAdornment.adornedObject = node;
+                //         node.addAdornment("mouseHover", terminalnodeAdornment);
+                //     }
+                // },
             )
             // always this height, even if the TreeExpanderButton is not visible
         );
