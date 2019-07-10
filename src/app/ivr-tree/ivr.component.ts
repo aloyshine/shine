@@ -394,7 +394,6 @@ export class IvrComponent implements OnInit {
                 contextMenu:     // define a context menu for each node
                     $("ContextMenu",  // that has one button
                         $("ContextMenuButton",
-<<<<<<< HEAD
                             $(go.TextBlock, "Email Subscription"),
                             { click: addEmail}
                         ),
@@ -446,16 +445,6 @@ export class IvrComponent implements OnInit {
                             { click: addTerminal}
                         ),
                        
-=======
-                            $(go.TextBlock, "Email"),
-                            { click: addEmail }),
-                            $("ContextMenuButton",
-                            $(go.TextBlock, "Terminal Node"),
-                            { click: addTerminal }),
-                            $("ContextMenuButton",
-                            $(go.TextBlock, "Demographics"),
-                            { click: addEmail }),
->>>>>>> 4630380674da8a46d3e241642cf59164ab8c1106
                         // more ContextMenuButtons would go here
                     )  // end Adornment
             }
