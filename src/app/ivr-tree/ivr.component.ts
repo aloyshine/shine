@@ -400,9 +400,9 @@ export class IvrComponent implements OnInit {
                                     font: "10pt Verdana, sans-serif"
                                 }
                             ),
-                            $("PanelExpanderButton", "COLLAPSIBLE",  // name of the object to make visible or invisible
-                                { column: 1, alignment: go.Spot.Right }
-                            )
+                            // $("PanelExpanderButton", "COLLAPSIBLE",  // name of the object to make visible or invisible
+                            //     { column: 1, alignment: go.Spot.Right }
+                            // )
                         ), // end Table panel
                         // with the list data bound in the Vertical Panel
                         $(go.Panel, "Vertical",
@@ -842,10 +842,23 @@ export class IvrComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log("result", result);
-            result.actions.push({ text: result.country, fill: "green" })
-            result.actions.push({ text: result.gender, fill: "yellow" })
-            result.actions.push({ text: result.race, fill: "blue" })
-            result.actions.push({ text: result.income, fill: "dodgerblue" })
+            if (result.country) {
+
+                result.actions.push({ text: result.country, fill: "green" })
+            }
+
+            if (result.gender) {
+
+                result.actions.push({ text: result.gender, fill: "yellow" })
+            }
+            if (result.race) {
+
+                result.actions.push({ text: result.race, fill: "blue" })
+            }
+            if (result.income) {
+
+                result.actions.push({ text: result.income, fill: "dodgerblue" })
+            }
             console.log("final result", result);
             this.nodeMetrics.emit(result);
             // result.actions.push({})
