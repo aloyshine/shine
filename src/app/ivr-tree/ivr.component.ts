@@ -70,51 +70,51 @@ export class IvrComponent implements OnInit {
 
         function addEmail(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'email' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Email' })
         }
 
         function addDemographics(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'demographics' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Demographics' })
         }
 
         function addPurchase(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'purchase' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Purchase' })
         }
 
         function addCusteng(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'customerengagement' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Customer Engagement' })
         }
 
         function addModquan(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'modelquantifiers' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Model Qualifiers' })
         }
 
         function addGeography(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'geography' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Geography' })
         }
 
         function addCustper(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'customerpersona' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Customer Persona' })
         }
 
         function addProattr(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'proattributes' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Pro Attributes' })
         }
 
         function addGraphcreate(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'graphcreate' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Graph Create' })
         }
 
         function addTerminal(e, obj) {
-            that.typeOfNode.emit({ key: obj.part.key, name: 'terminal' })
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Terminal' })
         }
         // this is shown by the mouseHover event handler
         // var nodeHoverAdornment =
@@ -348,16 +348,16 @@ export class IvrComponent implements OnInit {
 
 
                     switch (node.jb.question) {
-                        case "geography":
+                        case "Geography":
                             this.openDialogGeography(node.data);
                             break;
-                        case "demographics":
+                        case "Demographics":
                             this.openDialogDemographics(node.data);
                             break;
-                        case "purchase":
+                        case "Purchase":
                             this.openDialogPurchase(node.data);
                             break;
-                        case "customerengagement":
+                        case "Customer Engagement":
                             this.openDialogCustomerEngagement(node.data);
                             break;
                     }
@@ -453,7 +453,7 @@ export class IvrComponent implements OnInit {
                         ),
 
                         $("ContextMenuButton",
-                            $(go.TextBlock, "Model Quantifiers"),
+                            $(go.TextBlock, "Model Qualifiers"),
                             { click: addModquan }
                         ),
 
@@ -813,7 +813,7 @@ export class IvrComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log("result", result);
-            result.actions.push({ text: result.customerengagement })
+            result.actions.push({ text: result.customerengagement, fill: "lime" })
             console.log("final result", result);
             this.someEvent.emit(result);
             // result.actions.push({})
@@ -840,10 +840,10 @@ export class IvrComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log("result", result);
-            result.actions.push({ text: result.country })
-            result.actions.push({ text: result.gender })
-            result.actions.push({ text: result.race })
-            result.actions.push({ text: result.income })
+            result.actions.push({ text: result.country, fill: "green" })
+            result.actions.push({ text: result.gender, fill: "yellow" })
+            result.actions.push({ text: result.race, fill: "blue" })
+            result.actions.push({ text: result.income, fill: "dodgerblue" })
             console.log("final result", result);
             this.someEvent.emit(result);
             // result.actions.push({})
