@@ -62,9 +62,8 @@ export class AppComponent {
     { key: 10, question: "State Inspection" },
     { key: 11, question: "SUV" },
     { key: 12, question: "Van" },
-    { key: 13, category: "Terminal", text: "Susan" },
-    { key: 14, category: "Terminal", text: "Eric" },
-    { key: 15, category: "Terminal", text: "Steven" },
+    { key: 13, category: "Terminal", text: "OR" },
+    { key: 15, category: "Terminal", text: "AND" },
     { key: 16, category: "Terminal", text: "Tom" },
     { key: 17, category: "Terminal", text: "Emily" },
     { key: 18, category: "Terminal", text: "Tony" },
@@ -84,13 +83,14 @@ export class AppComponent {
     { from: 7, to: 11, answer: 1 },
     { from: 7, to: 12, answer: 2 },
     { from: 5, to: 13 },
-    { from: 6, to: 14 },
+    { from: 6, to: 13 },
     { from: 11, to: 15 },
     { from: 12, to: 16 },
     { from: 8, to: 17 },
     { from: 9, to: 18 },
     { from: 10, to: 19 },
-    { from: 4, to: 20 }
+    { from: 4, to: 20 },
+    { from : 13, to: 15}
   ];
 
   model = new go.TreeModel(this.attributes);

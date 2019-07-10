@@ -200,7 +200,24 @@ export class IvrComponent implements OnInit {
                 $("TreeExpanderButton")
             )
         );
+       // this.diagram.nodeTemplate=$(go.Node,
+        //     "Spot",
+        //     $(go.Panel, "Auto",
+        //       { name: "BODY" },
+        //         $(go.Shape, "Circle",
+        //             { width: 55, height: 55, fill: greengrad, stroke: null }
+        //         ),
+        //         $(go.TextBlock,
+        //             { font: "10pt Verdana, sans-serif" },
+        //             new go.Binding("text")
+        //         ),
+        //      ),
+        //      $(go.Panel,  // this is underneath the "BODY"
+        //         { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
+        //         $("TreeExpanderButton")
+        //     )
 
+        // );
         // define a second kind of Node:
         this.diagram.nodeTemplateMap.add("Terminal",
             $(go.Node, "Spot",
@@ -210,9 +227,17 @@ export class IvrComponent implements OnInit {
                 $(go.TextBlock,
                     { font: "10pt Verdana, sans-serif" },
                     new go.Binding("text")
+                ),
+                $(go.Panel, "Vertical",
+                    $(go.Panel,  // this is underneath the "BODY"
+                        { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
+                        $("TreeExpanderButton")
+                    )
                 )
             )
-        );
+              // always this height, even if the TreeExpanderButton is not visible
+            );
+    
 
         this.diagram.linkTemplate =
             $(go.Link, go.Link.Orthogonal,
