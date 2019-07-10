@@ -1,0 +1,20 @@
+<div>
+  Click on a node to edit its text or change its color.
+   <app-diagram-editor [model]="model" (typeOfNode)="addNode($event)" >
+  </app-diagram-editor>  
+  <app-ivr [model]="modelIVR" (typeOfNode)="addNode($event)"></app-ivr>
+</div>
+
+<!-- <button (click)="someFunc()">aaaa</button> -->
+
+
+<!-- <div style="width: 50%;background:#f0e68c">
+  <button (click)="addNode1('emailSub')">Add Email Subscription</button>
+  <button (click)="addNode1('purBeh')">Add Purchase Behaviour</button>
+  <button (click)="addNode1('CusEng')">Add Customer Engagement</button>
+  <button (click)="addNode1('modQua')">Add Model Qualifiers</button>
+  <button (click)="addNode1('geo')">Add Geagraphy</button>
+  <button (click)="addNode1('dem')">Add Demographics</button>
+  <button (click)="addNode1('cusPer')">Add Customer Persona</button>
+  <button (click)="addNode1('proAttr')">Add Pro Attributes</button>
+</div> -->
