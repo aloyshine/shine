@@ -2,7 +2,7 @@
   Click on a node to edit its text or change its color.
    <app-diagram-editor [model]="model" (typeOfNode)="addNode($event)" >
   </app-diagram-editor>  
-  <app-ivr [model]="modelIVR" (typeOfNode)="addIvrNode($event)"></app-ivr>
+  <app-ivr [model]="modelIVR" (someEvent)="onSomeEvent($event)" (typeOfNode)="addIvrNode($event)"></app-ivr>
 </div>
 
 <!-- <button (click)="someFunc()">aaaa</button> -->

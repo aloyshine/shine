@@ -31,6 +31,9 @@ export class IvrComponent implements OnInit {
     typeOfNode = new EventEmitter<any>();
 
     @Output()
+    someEvent = new EventEmitter<any>();
+
+    @Output()
     modelChanged = new EventEmitter<go.ChangedEvent>();
 
     constructor(public dialog: MatDialog) {
@@ -296,25 +299,25 @@ export class IvrComponent implements OnInit {
 
         // This method is called as a context menu button's click handler.
         // Rotate the selected node's color through a predefined sequence of colors.
-        function changeColor(e, obj) {
-            this.diagram.commit(function (d) {
-                // get the context menu that holds the button that was clicked
-                var contextmenu = obj.part;
-                // get the node data to which the Node is data bound
-                var nodedata = contextmenu.data;
-                // compute the next color for the node
-                var newcolor = "lightblue";
-                switch (nodedata.color) {
-                    case "lightblue": newcolor = "lightgreen"; break;
-                    case "lightgreen": newcolor = "lightyellow"; break;
-                    case "lightyellow": newcolor = "orange"; break;
-                    case "orange": newcolor = "lightblue"; break;
-                }
-                // modify the node data
-                // this evaluates data Bindings and records changes in the UndoManager
-                d.model.set(nodedata, "color", newcolor);
-            }, "changed color");
-        }
+        // function changeColor(e, obj) {
+        //     this.diagram.commit(function (d) {
+        //         // get the context menu that holds the button that was clicked
+        //         var contextmenu = obj.part;
+        //         // get the node data to which the Node is data bound
+        //         var nodedata = contextmenu.data;
+        //         // compute the next color for the node
+        //         var newcolor = "lightblue";
+        //         switch (nodedata.color) {
+        //             case "lightblue": newcolor = "lightgreen"; break;
+        //             case "lightgreen": newcolor = "lightyellow"; break;
+        //             case "lightyellow": newcolor = "orange"; break;
+        //             case "orange": newcolor = "lightblue"; break;
+        //         }
+        //         // modify the node data
+        //         // this evaluates data Bindings and records changes in the UndoManager
+        //         d.model.set(nodedata, "color", newcolor);
+        //     }, "changed color");
+        // }
 
         this.diagram.nodeTemplate = $(go.Node, "Vertical",
             { selectionObjectName: "BODY" },
@@ -391,6 +394,7 @@ export class IvrComponent implements OnInit {
                 contextMenu:     // define a context menu for each node
                     $("ContextMenu",  // that has one button
                         $("ContextMenuButton",
+<<<<<<< HEAD
                             $(go.TextBlock, "Email Subscription"),
                             { click: addEmail}
                         ),
@@ -442,6 +446,16 @@ export class IvrComponent implements OnInit {
                             { click: addTerminal}
                         ),
                        
+=======
+                            $(go.TextBlock, "Email"),
+                            { click: addEmail }),
+                            $("ContextMenuButton",
+                            $(go.TextBlock, "Terminal Node"),
+                            { click: addTerminal }),
+                            $("ContextMenuButton",
+                            $(go.TextBlock, "Demographics"),
+                            { click: addEmail }),
+>>>>>>> 4630380674da8a46d3e241642cf59164ab8c1106
                         // more ContextMenuButtons would go here
                     )  // end Adornment
             }
@@ -704,20 +718,27 @@ export class IvrComponent implements OnInit {
         console.log("inside open dialog", data);
         const dialogRef = this.dialog.open(ModalComponent, {
             width: '250px',
-            data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
+            // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
+            data: { key: data.key, question: data.question, actions:data.actions }
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.diagram.model.commit(function (m) {
-                    console.log("m", m);
-                    m.set(data, "income", result.income);
-                    // m.set(data, "color", result.color);
-                    // m.set(data, "spending", result.spending);
-                }, "modified node properties");
-                data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
-            }
-            console.log("inside open dialog after", data);
+            console.log("result",result);
+            result.actions.push({text:result.country})
+            result.actions.push({text:result.gender})
+            console.log("final result",result);
+            this.someEvent.emit(result);
+            // result.actions.push({})
+            // if (result) {
+            //     this.diagram.model.commit(function (m) {
+            //         console.log("m", m);
+            //         m.set(data, "income", result.income);
+            //         // m.set(data, "color", result.color);
+            //         // m.set(data, "spending", result.spending);
+            //     }, "modified node properties");
+            //     // data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
+            // }
+            // console.log("inside open dialog after", data);
         });
 
     }
