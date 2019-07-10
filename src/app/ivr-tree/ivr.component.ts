@@ -58,6 +58,7 @@ export class IvrComponent implements OnInit {
 
         var that = this;
 
+        
         // this is shown by the mouseHover event handler
         var nodeHoverAdornment =
             $(go.Adornment, "Spot",
@@ -78,6 +79,16 @@ export class IvrComponent implements OnInit {
                             node.diagram.select(node);
                         }
                     }),
+                    {
+                        contextMenu:     // define a context menu for each node
+                          $("ContextMenu",  // that has one button
+                            $("ContextMenuButton",
+                            //   $(go.TextBlock, "Change Color"),
+                              //{ click: changeColor }
+                            )
+                            // more ContextMenuButtons would go here
+                          )  // end Adornment
+                    },
                 $("Button",
                     // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
                     {
@@ -124,8 +135,100 @@ export class IvrComponent implements OnInit {
                     $(go.TextBlock, "Demographics", {
                         stroke: '#fff',
                         margin: 2,
+                    })),
+                    $("Button",
+                    // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
+                    {
+                        alignment: go.Spot.Right,
+                        alignmentFocus: go.Spot.Left,
+                        "ButtonBorder.fill": "#007bff",
+                        "ButtonBorder.stroke": "#007bff",
+                        "_buttonFillOver": "#007bff",
+                        "_buttonStrokeOver": "#007bff",
+                        cursor: "pointer",
+                        width: 100,
+
+                    },
+                    {
+                        click: function (e, obj) {
+                            console.log("ADD TERMINAL");
+                            that.typeOfNode.emit({ key: obj.part.key, name: 'addterminal' })
+                        }
+                    },
+                    $(go.TextBlock, "Add Terminal", {
+                        stroke: '#fff',
+                        margin: 2,
                     }))
             );
+
+        var terminalnodeAdornment = 
+        $(go.Adornment, "Spot",
+           {
+                background: "transparent",
+                // hide the Adornment when the mouse leaves it
+                mouseLeave: function (e, obj) {
+                    var ad = obj.part;
+                    ad.adornedPart.removeAdornment("mouseHover");
+                }
+          },
+          $(go.Placeholder,
+            {
+                background: "transparent",  // to allow this Placeholder to be "seen" by mouse events
+                isActionable: true,  // needed because this is in a temporary Layer
+                click: function (e, obj) {
+                    var node = obj.part.adornedPart;
+                    node.diagram.select(node);
+                }
+            }),
+            $("Button",
+            // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
+            {
+                alignment: go.Spot.Left,
+                alignmentFocus: go.Spot.Right,
+                "ButtonBorder.fill": "#007bff",
+                "ButtonBorder.stroke": "#007bff",
+                "_buttonFillOver": "#007bff",
+                "_buttonStrokeOver": "#007bff",
+                cursor: "pointer",
+                width: 80,
+
+            },
+            {
+                click: function (e, obj) {
+                    console.log("aloy", e, obj.part.key);
+                    console.log("AND");
+                    that.typeOfNode.emit({ key: obj.part.key, name: 'and' })
+                }
+            },
+            $(go.TextBlock, "AND", {
+                stroke: '#fff',
+                margin: 2,
+            })),
+            $("Button",
+            // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
+            {
+                alignment: go.Spot.Right,
+                alignmentFocus: go.Spot.Left,
+                "ButtonBorder.fill": "#007bff",
+                "ButtonBorder.stroke": "#007bff",
+                "_buttonFillOver": "#007bff",
+                "_buttonStrokeOver": "#007bff",
+                cursor: "pointer",
+                width: 100,
+
+            },
+            {
+                click: function (e, obj) {
+                    console.log("aloy", e, obj.part.key);
+                    console.log("OR");
+                    that.typeOfNode.emit({ key: obj.part.key, name: 'or' })
+                }
+            },
+            $(go.TextBlock, "OR", {
+                stroke: '#fff',
+                margin: 2,
+            }))
+        );
 
         var bluegrad = $(go.Brush, "Linear", { 0: "#C4ECFF", 1: "#70D4FF" });
         var greengrad = $(go.Brush, "Linear", { 0: "#B1E2A5", 1: "#7AE060" });
@@ -143,12 +246,20 @@ export class IvrComponent implements OnInit {
                     new go.Binding("text")
                 )
             );
+
         this.diagram.nodeTemplate = $(go.Node, "Vertical",
             { selectionObjectName: "BODY" },
+            {
+                click: (e, node: any) => {
+                    console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+                    //check for bottomsheet
+                    this.openDialog(node.data);
+                }
+            },
             // the main "BODY" consists of a RoundedRectangle surrounding nested Panels
             $(go.Panel, "Auto",
                 { name: "BODY" },
-                $(go.Shape, "Rectangle",
+                $(go.Shape, "RoundedRectangle",
                     { fill: bluegrad, stroke: null }
                 ),
                 $(go.Panel, "Vertical",
@@ -184,7 +295,7 @@ export class IvrComponent implements OnInit {
                         $(go.Panel, "Vertical",
                             {
                                 name: "COLLAPSIBLE",  // identify to the PanelExpanderButton
-                                padding: 2,
+                                padding: 10,
                                 stretch: go.GraphObject.Horizontal,  // take up whole available width
                                 background: "white",  // to distinguish from the node's body
                                 defaultAlignment: go.Spot.Left,  // thus no need to specify alignment on each element
@@ -198,26 +309,18 @@ export class IvrComponent implements OnInit {
             $(go.Panel,  // this is underneath the "BODY"
                 { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
                 $("TreeExpanderButton")
-            )
-        );
-       // this.diagram.nodeTemplate=$(go.Node,
-        //     "Spot",
-        //     $(go.Panel, "Auto",
-        //       { name: "BODY" },
-        //         $(go.Shape, "Circle",
-        //             { width: 55, height: 55, fill: greengrad, stroke: null }
-        //         ),
-        //         $(go.TextBlock,
-        //             { font: "10pt Verdana, sans-serif" },
-        //             new go.Binding("text")
-        //         ),
-        //      ),
-        //      $(go.Panel,  // this is underneath the "BODY"
-        //         { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
-        //         $("TreeExpanderButton")
-        //     )
+            ),
+            {
+                // show the Adornment when a mouseHover event occurs
+                mouseHover: function (e, obj) {
+                    var node = obj.part;
+                    nodeHoverAdornment.adornedObject = node;
+                    node.addAdornment("mouseHover", nodeHoverAdornment);
+                }
+            }
 
-        // );
+        );
+
         // define a second kind of Node:
         this.diagram.nodeTemplateMap.add("Terminal",
             $(go.Node, "Spot",
