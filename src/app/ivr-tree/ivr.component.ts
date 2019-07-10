@@ -58,7 +58,14 @@ export class IvrComponent implements OnInit {
 
         var that = this;
 
-        
+        function addEmail(e,obj){
+            console.log("email sub");
+            that.typeOfNode.emit({ key: obj.part.key, name: 'email' })
+        }
+
+        function addTerminal(e,obj){
+            that.typeOfNode.emit({ key: obj.part.key, name: 'terminal' })
+        }
         // this is shown by the mouseHover event handler
         var nodeHoverAdornment =
             $(go.Adornment, "Spot",
@@ -83,8 +90,8 @@ export class IvrComponent implements OnInit {
                         contextMenu:     // define a context menu for each node
                           $("ContextMenu",  // that has one button
                             $("ContextMenuButton",
-                            //   $(go.TextBlock, "Change Color"),
-                              //{ click: changeColor }
+                              $(go.TextBlock, "Email Sub"),
+                              { click: addEmail }
                             )
                             // more ContextMenuButtons would go here
                           )  // end Adornment
@@ -197,7 +204,7 @@ export class IvrComponent implements OnInit {
                 click: function (e, obj) {
                     console.log("aloy", e, obj.part.key);
                     console.log("AND");
-                    that.typeOfNode.emit({ key: obj.part.key, name: 'and' })
+                   // that.typeOfNode.emit({ key: obj.part.key, name: 'and' })
                 }
             },
             $(go.TextBlock, "AND", {
@@ -221,7 +228,7 @@ export class IvrComponent implements OnInit {
                 click: function (e, obj) {
                     console.log("aloy", e, obj.part.key);
                     console.log("OR");
-                    that.typeOfNode.emit({ key: obj.part.key, name: 'or' })
+                   // that.typeOfNode.emit({ key: obj.part.key, name: 'or' })
                 }
             },
             $(go.TextBlock, "OR", {
@@ -344,14 +351,17 @@ export class IvrComponent implements OnInit {
                 contextMenu:     // define a context menu for each node
                     $("ContextMenu",  // that has one button
                         $("ContextMenuButton",
-                            $(go.TextBlock, ""),
-                            { click: changeColor }),
-                            $("ContextMenuButton",
                             $(go.TextBlock, "Email"),
-                            ),
-                            $("ContextMenuButton",
+                            { click: addEmail}
+                        ),
+
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Terminal Node"),
+                            { click: addTerminal}
+                        ),
+                        $("ContextMenuButton",
                             $(go.TextBlock, "Demographics"),
-                            ),
+                        ),
                         // more ContextMenuButtons would go here
                     )  // end Adornment
             }
@@ -359,35 +369,35 @@ export class IvrComponent implements OnInit {
         );
 
         // also define a context menu for the diagram's background
-        this.diagram.contextMenu =
-            $("ContextMenu",
-                $("ContextMenuButton",
-                    $(go.TextBlock, "Undo"),
-                    { click: function (e, obj) { e.diagram.commandHandler.undo(); } },
-                    new go.Binding("visible", "", function (o) {
-                        return o.diagram.commandHandler.canUndo();
-                    }).ofObject()),
-                $("ContextMenuButton",
-                    $(go.TextBlock, "Redo"),
-                    { click: function (e, obj) { e.diagram.commandHandler.redo(); } },
-                    new go.Binding("visible", "", function (o) {
-                        return o.diagram.commandHandler.canRedo();
-                    }).ofObject()),
-                // no binding, always visible button:
-                $("ContextMenuButton",
-                    $(go.TextBlock, "New Node"),
-                    {
-                        click: function (e, obj) {
-                            e.diagram.commit(function (d) {
-                                var data = {};
-                                d.model.addNodeData(data);
-                                //part = d.findPartForData(data);  // must be same data reference, not a new {}
-                                // set location to saved mouseDownPoint in ContextMenuTool
-                               // part.location = d.toolManager.contextMenuTool.mouseDownPoint;
-                            }, 'new node');
-                        }
-                    })
-            );
+        // this.diagram.contextMenu =
+        //     $("ContextMenu",
+        //         $("ContextMenuButton",
+        //             $(go.TextBlock, "Undo"),
+        //             { click: function (e, obj) { e.diagram.commandHandler.undo(); } },
+        //             new go.Binding("visible", "", function (o) {
+        //                 return o.diagram.commandHandler.canUndo();
+        //             }).ofObject()),
+        //         $("ContextMenuButton",
+        //             $(go.TextBlock, "Redo"),
+        //             { click: function (e, obj) { e.diagram.commandHandler.redo(); } },
+        //             new go.Binding("visible", "", function (o) {
+        //                 return o.diagram.commandHandler.canRedo();
+        //             }).ofObject()),
+        //         // no binding, always visible button:
+        //         $("ContextMenuButton",
+        //             $(go.TextBlock, "New Node"),
+        //             {
+        //                 click: function (e, obj) {
+        //                     e.diagram.commit(function (d) {
+        //                         var data = {};
+        //                         d.model.addNodeData(data);
+        //                         //part = d.findPartForData(data);  // must be same data reference, not a new {}
+        //                         // set location to saved mouseDownPoint in ContextMenuTool
+        //                        // part.location = d.toolManager.contextMenuTool.mouseDownPoint;
+        //                     }, 'new node');
+        //                 }
+        //             })
+        //     );
 
         // define a second kind of Node:
         this.diagram.nodeTemplateMap.add("Terminal",
@@ -399,12 +409,14 @@ export class IvrComponent implements OnInit {
                     { font: "10pt Verdana, sans-serif" },
                     new go.Binding("text")
                 ),
-                $(go.Panel, "Vertical",
-                    $(go.Panel,  // this is underneath the "BODY"
-                        { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
-                        $("TreeExpanderButton")
-                    )
-                )
+                {
+                    // show the Adornment when a mouseHover event occurs
+                    mouseHover: function (e, obj) {
+                        var node = obj.part;
+                        terminalnodeAdornment.adornedObject = node;
+                        node.addAdornment("mouseHover", terminalnodeAdornment);
+                    }
+                },
             )
               // always this height, even if the TreeExpanderButton is not visible
             );

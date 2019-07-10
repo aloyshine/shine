@@ -23,14 +23,14 @@ export class AppComponent {
   ];
 
 
-   nodeDataArray = [
+   nodeDataArray= [
     {
       key: 1, question: "All Customers",
       actions: [
         { text: "Sales", figure: "ElectricalHazard", fill: "green" },
         { text: "Parts and Services", figure: "FireHazard", fill: "red" },
         { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
-      ]
+      ],category:""
     },
     // {
     //   key: 2, question: "Email Subscription",
@@ -138,7 +138,8 @@ export class AppComponent {
           { text: "Sales", figure: "ElectricalHazard", fill: "green" },
           { text: "Parts and Services", figure: "FireHazard", fill: "red" },
           { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
-        ]
+        ],
+        category:""
       });
     console.log(this.nodeDataArray);
     this.model = new go.TreeModel(this.attributes);
@@ -153,17 +154,21 @@ export class AppComponent {
       case "demographics":
         obj.source = 'data:image/jpeg;base64,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lVHqMyBq2VTawAYBenlOfJDLJx0Oknb+aNYuCvUrfHyLpERNCBMgTEsHAuF2tVqDX8q+X+IyYxtkN0d/B8F2Sa+JtW/Qe77zuiJ0pV4MG7EREkgREQBERAEREAREQBERAEREAREQBERAEjeK8KFXvLo/n0Po33klEhq9yU6KNXoMhyuLH/7bzmuXfFYVKgs63+o9h6SAxvAXXWmcw8tm+xmMsbWxqpp7kPE9OhBsQQfIixnmZlxBERAE8LQUHMEUH+LKL/Ge4gAi+8i63L1BqwrlTnBUghzbu6jSSkQnRFBhffWcGD4NQpOalOmFdr3bMxvm1OhNp3zIiwYnpFJNgCSdgBJHB8FqPqwyL5ka+5fvLBguHpSHdGvVjuftLxg2Vc0iP4VwbLZ6urdF6D2+Zk1ETdJLYybsRESSBERAEREAREQBERAEREAREQBERAEREAREQBERAEREA1V8OjizqD7R9D0kZX5fQ+BivpuPv85MRIcU9yU2isVeAVR4Sre+x+f3nK/C6w3pn3WP0MuMSnbRbWylHBVP7p/9NvtMDB1P7p/9NvtLtEjtInuFNThlY7U29+n1nTS4FVO+Vfa1/peWmJPaRHcZCUOXlHjcn0At95J4bBU6fgQD13PxOs6IllFIq5NiIiWIEREARE8vfpb3wD1E8U835re689wBERAEREAREQBERAMREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREATMxEA//2Q=='
         break;
+      case "terminal":
+        obj.category = "Terminal"
+      break;
     }
     
 
-    this.nodeDataArray.push({
-        key: (++this.counter1), question: obj.name,
-        actions: [
-          // { text: "Sales", figure: "ElectricalHazard", fill: "green" },
-          // { text: "Parts and Services", figure: "FireHazard", fill: "red" },
-          // { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
-        ]
-      });
+
+  this.nodeDataArray.push({
+    key: (++this.counter1), question: obj.name,
+    actions: [
+      // { text: "Sales", figure: "ElectricalHazard", fill: "green" },
+      // { text: "Parts and Services", figure: "FireHazard", fill: "red" },
+      // { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
+    ],category:obj.category
+  });
 
       this.linkDataArray.push({
         from:obj.key,
@@ -171,5 +176,8 @@ export class AppComponent {
       })
     console.log(this.nodeDataArray);
     this.modelIVR = new go.GraphLinksModel(this.nodeDataArray,this.linkDataArray);
+
+
+   
   }
 }
