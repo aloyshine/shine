@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    padding: 0;
+}
+
+h1{
+    
+    margin: 0;
+    padding: 10px 30px;
+    background: #3B4751;
+    color: #fff;
+    
+}
+
+div.cdk-overlay-pane{
+    position: fixed !important;
+    right: 0 !important;
+    width:400px !important;
+    height: 100% !important;
+}
+
+div.mat-dialog-content{
+    height: 90%;
+    max-height: 90%;
+}

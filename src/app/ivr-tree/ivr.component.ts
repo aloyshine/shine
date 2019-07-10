@@ -8,6 +8,51 @@ import { TerminalcomponentComponent } from '../terminalcomponent/terminalcompone
 import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.component';
 import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
 import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
+go.Shape.defineFigureGenerator("RoundedRightRectangle", function (shape, w, h) {
+    // this figure takes one parameter, the size of the corner
+    var p1 = h / 2;  // default corner size
+    if (shape !== null) {
+        var param1 = shape.parameter1;
+        if (!isNaN(param1) && param1 >= 0) p1 = param1;  // can't be negative or NaN
+    }
+    p1 = Math.min(p1, w / 2);
+    p1 = Math.min(p1, h / 2);  // limit by whole height or by half height?
+    var geo = new go.Geometry();
+    // a single figure consisting of straight lines and quarter-circle arcs
+    geo.add(new go.PathFigure(0, 0)
+        .add(new go.PathSegment(go.PathSegment.Line, w - p1, 0))
+        .add(new go.PathSegment(go.PathSegment.Arc, 270, 90, w - p1, p1, p1, p1))
+        .add(new go.PathSegment(go.PathSegment.Line, w, h - p1))
+        .add(new go.PathSegment(go.PathSegment.Arc, 0, 90, w - p1, h - p1, p1, p1))
+        .add(new go.PathSegment(go.PathSegment.Line, p1, h))
+        .add(new go.PathSegment(go.PathSegment.Line, 0, h).close()));
+    // don't intersect with two top corners when used in an "Auto" Panel
+    geo.spot1 = new go.Spot(0, 0, 0.3 * p1, 0.3 * p1);
+    geo.spot2 = new go.Spot(1, 1, -0.3 * p1, 0);
+    return geo;
+});
+
+go.Shape.defineFigureGenerator("RoundedLeftRectangle", function (shape, w, h) {
+    // this figure takes one parameter, the size of the corner
+    var p1 = h / 2;  // default corner size
+    if (shape !== null) {
+        var param1 = shape.parameter1;
+        if (!isNaN(param1) && param1 >= 0) p1 = param1;  // can't be negative or NaN
+    }
+    p1 = Math.min(p1, w / 2);
+    p1 = Math.min(p1, h / 2);  // limit by whole height or by half height?
+    var geo = new go.Geometry();
+    // a single figure consisting of straight lines and quarter-circle arcs
+    geo.add(new go.PathFigure(0, p1)
+        .add(new go.PathSegment(go.PathSegment.Arc, 180, 90, p1, p1, p1, p1))
+        .add(new go.PathSegment(go.PathSegment.Line, w, 0))
+        .add(new go.PathSegment(go.PathSegment.Line, w, h))
+        .add(new go.PathSegment(go.PathSegment.Arc, 90, 90, p1, h - p1, p1, p1).close()));
+    // don't intersect with two top corners when used in an "Auto" Panel
+    geo.spot1 = new go.Spot(0, 0, 0.3 * p1, 0.3 * p1);
+    geo.spot2 = new go.Spot(1, 1, -0.3 * p1, 0);
+    return geo;
+});
 
 @Component({
     selector: 'app-ivr',
@@ -374,22 +419,36 @@ export class IvrComponent implements OnInit {
                     // this.openDialog(node.data);
                 }
             },
+
             // the main "BODY" consists of a RoundedRectangle surrounding nested Panels
             $(go.Panel, "Auto",
                 { name: "BODY" },
-                $(go.Shape, "RoundedRectangle",
-                    { fill: bluegrad, stroke: null }
-                ),
+                $(go.Panel, "Horizontal", 
+                $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35,width:70 },
+                    { fill: bluegrad, stroke: null },
+                    new go.Binding("fill", "color")
+                ), $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35,width:210 },
+                    { fill: bluegrad, stroke: null },
+                    new go.Binding("fill", "color")
+                )),
+                
                 $(go.Panel, "Vertical",
+                    $(go.Panel, "Horizontal", { margin: 3 },
+                        $(go.Picture,
+                            { margin: 10, width: 70, height: 30, background: "white" },
+                            new go.Binding("source")),
+                        $(go.TextBlock,
+                            {
+                                stretch: go.GraphObject.Horizontal,
+                                font: "bold 12pt Verdana, sans-serif"
+                            },
+                            new go.Binding("text", "question")
+                        ),
+
+                    ),
                     { margin: 3 },
                     // the title
-                    $(go.TextBlock,
-                        {
-                            stretch: go.GraphObject.Horizontal,
-                            font: "bold 12pt Verdana, sans-serif"
-                        },
-                        new go.Binding("text", "question")
-                    ),
+
                     // the optional list of actions
                     $(go.Panel, "Vertical",
                         { stretch: go.GraphObject.Horizontal, visible: false },  // not visible unless there is more than one action
@@ -643,10 +702,10 @@ export class IvrComponent implements OnInit {
             result.actions.push({ text: result.country, fill: "green" })
             console.log("final result emitted", result);
             console.log("all of the customers", this.allCustomersArray);
-           let ageFilteredCustomers =  this.allCustomersArray.filter((customer) => {
+            let ageFilteredCustomers = this.allCustomersArray.filter((customer) => {
                 return customer.Age < 37
             });
-            console.log('filterd customers based on age',ageFilteredCustomers);
+            console.log('filterd customers based on age', ageFilteredCustomers);
             this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
@@ -745,10 +804,11 @@ export class IvrComponent implements OnInit {
             }
             console.log("final result", result);
             console.log("all of the customers", this.allCustomersArray);
-            let ageFilteredCustomers =  this.allCustomersArray.filter((customer) => {
-                 return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
-             });
-             console.log('filterd customers based on age',ageFilteredCustomers);
+            let ageFilteredCustomers = this.allCustomersArray.filter((customer) => {
+                return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
+            });
+            console.log('filterd customers based on age', ageFilteredCustomers);
+            result.filtered = ageFilteredCustomers;
             this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
@@ -769,7 +829,7 @@ export class IvrComponent implements OnInit {
         // console.log("data in terminal", data);
         this.terminalevent.emit(data)
     }
-     csvJSON(csv) {
+    csvJSON(csv) {
         var lines = csv.split("\n");
 
 
@@ -785,13 +845,13 @@ export class IvrComponent implements OnInit {
             }
 
             this.allCustomersArray.push(obj);
-            console.log("json result",this.allCustomersArray);
+            console.log("json result", this.allCustomersArray);
         }
 
         //return result; //JavaScript object
         return JSON.stringify(this.allCustomersArray); //JSON
     }
-    convertFile(e){
+    convertFile(e) {
         const input = (<HTMLInputElement>document.getElementById('fileInput'))
 
         const reader = new FileReader();
