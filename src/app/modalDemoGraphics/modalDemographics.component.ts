@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 })
 export class ModalComponent1 implements OnInit {
   country:string = 'India';
-  race:string = 'black';
+  age:string = 'black';
   gender:string = 'male';
   income:number;
 

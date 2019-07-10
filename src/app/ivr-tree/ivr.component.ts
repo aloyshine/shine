@@ -45,6 +45,8 @@ export class IvrComponent implements OnInit {
 
     @Output()
     modelChanged = new EventEmitter<go.ChangedEvent>();
+    allCustomersArray = [];
+
 
     constructor(public dialog: MatDialog) {
 
@@ -640,6 +642,11 @@ export class IvrComponent implements OnInit {
             console.log("result", result);
             result.actions.push({ text: result.country, fill: "green" })
             console.log("final result emitted", result);
+            console.log("all of the customers", this.allCustomersArray);
+           let ageFilteredCustomers =  this.allCustomersArray.filter((customer) => {
+                return customer.Age < 37
+            });
+            console.log('filterd customers based on age',ageFilteredCustomers);
             this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
@@ -728,15 +735,20 @@ export class IvrComponent implements OnInit {
 
                 result.actions.push({ text: result.gender, fill: "yellow" })
             }
-            if (result.race) {
+            if (result.age) {
 
-                result.actions.push({ text: result.race, fill: "blue" })
+                result.actions.push({ text: result.age, fill: "blue" })
             }
             if (result.income) {
 
                 result.actions.push({ text: result.income, fill: "dodgerblue" })
             }
             console.log("final result", result);
+            console.log("all of the customers", this.allCustomersArray);
+            let ageFilteredCustomers =  this.allCustomersArray.filter((customer) => {
+                 return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
+             });
+             console.log('filterd customers based on age',ageFilteredCustomers);
             this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
@@ -760,7 +772,6 @@ export class IvrComponent implements OnInit {
      csvJSON(csv) {
         var lines = csv.split("\n");
 
-        var allCustomersArray = [];
 
         var headers = lines[0].split(",");
 
@@ -773,12 +784,12 @@ export class IvrComponent implements OnInit {
                 obj[headers[j]] = currentline[j];
             }
 
-            allCustomersArray.push(obj);
-            // console.log("json result",result);
+            this.allCustomersArray.push(obj);
+            console.log("json result",this.allCustomersArray);
         }
 
         //return result; //JavaScript object
-        return JSON.stringify(allCustomersArray); //JSON
+        return JSON.stringify(this.allCustomersArray); //JSON
     }
     convertFile(e){
         const input = (<HTMLInputElement>document.getElementById('fileInput'))
