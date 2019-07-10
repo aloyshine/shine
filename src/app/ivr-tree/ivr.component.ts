@@ -5,6 +5,9 @@ import * as go from 'gojs';
 import { GuidedDraggingTool } from './GuidedDraggingTool';
 import { ModalComponent } from '../modal/modal.component';
 import {TerminalcomponentComponent} from '../terminalcomponent/terminalcomponent.component'
+import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.component';
+import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
+import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
 
 @Component({
     selector: 'app-ivr',
@@ -40,7 +43,7 @@ export class IvrComponent implements OnInit {
     @Output()
     modelChanged = new EventEmitter<go.ChangedEvent>();
 
-    constructor(public dialog: MatDialog) {
+    constructor(public dialog: MatDialog, public dialog1: MatDialog) {
 
         const $ = go.GraphObject.make;
         // Place GoJS license key here:
@@ -65,52 +68,52 @@ export class IvrComponent implements OnInit {
 
         var that = this;
 
-        function addEmail(e,obj){
+        function addEmail(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'email' })
         }
 
-        function addDemographics(e,obj){
+        function addDemographics(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'demographics' })
         }
 
-        function addPurchase(e,obj){
+        function addPurchase(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'purchase' })
         }
 
-        function addCusteng(e,obj){
+        function addCusteng(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'customerengagement' })
         }
 
-        function addModquan(e,obj){
+        function addModquan(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'modelquantifiers' })
         }
 
-        function addGeography(e,obj){
+        function addGeography(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'geography' })
         }
 
-        function addCustper(e,obj){
+        function addCustper(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'customerpersona' })
         }
 
-        function addProattr(e,obj){
+        function addProattr(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'proattributes' })
         }
 
-        function addGraphcreate(e,obj){
+        function addGraphcreate(e, obj) {
             console.log("email sub");
             that.typeOfNode.emit({ key: obj.part.key, name: 'graphcreate' })
         }
 
-        function addTerminal(e,obj){
+        function addTerminal(e, obj) {
             that.typeOfNode.emit({ key: obj.part.key, name: 'terminal' })
         }
         // this is shown by the mouseHover event handler
@@ -133,16 +136,16 @@ export class IvrComponent implements OnInit {
                             node.diagram.select(node);
                         }
                     }),
-                    {
-                        contextMenu:     // define a context menu for each node
-                          $("ContextMenu",  // that has one button
+                {
+                    contextMenu:     // define a context menu for each node
+                        $("ContextMenu",  // that has one button
                             $("ContextMenuButton",
-                              $(go.TextBlock, "Email Sub"),
-                              { click: addEmail }
+                                $(go.TextBlock, "Email Sub"),
+                                { click: addEmail }
                             )
                             // more ContextMenuButtons would go here
-                          )  // end Adornment
-                    },
+                        )  // end Adornment
+                },
                 $("Button",
                     // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
                     {
@@ -190,7 +193,7 @@ export class IvrComponent implements OnInit {
                         stroke: '#fff',
                         margin: 2,
                     })),
-                    $("Button",
+                $("Button",
                     // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
                     {
                         alignment: go.Spot.Right,
@@ -215,74 +218,74 @@ export class IvrComponent implements OnInit {
                     }))
             );
 
-        var terminalnodeAdornment = 
-        $(go.Adornment, "Spot",
-           {
-                background: "transparent",
-                // hide the Adornment when the mouse leaves it
-                mouseLeave: function (e, obj) {
-                    var ad = obj.part;
-                    ad.adornedPart.removeAdornment("mouseHover");
-                }
-          },
-          $(go.Placeholder,
-            {
-                background: "transparent",  // to allow this Placeholder to be "seen" by mouse events
-                isActionable: true,  // needed because this is in a temporary Layer
-                click: function (e, obj) {
-                    var node = obj.part.adornedPart;
-                    node.diagram.select(node);
-                }
-            }),
-            $("Button",
-            // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
-            {
-                alignment: go.Spot.Left,
-                alignmentFocus: go.Spot.Right,
-                "ButtonBorder.fill": "#007bff",
-                "ButtonBorder.stroke": "#007bff",
-                "_buttonFillOver": "#007bff",
-                "_buttonStrokeOver": "#007bff",
-                cursor: "pointer",
-                width: 80,
+        var terminalnodeAdornment =
+            $(go.Adornment, "Spot",
+                {
+                    background: "transparent",
+                    // hide the Adornment when the mouse leaves it
+                    mouseLeave: function (e, obj) {
+                        var ad = obj.part;
+                        ad.adornedPart.removeAdornment("mouseHover");
+                    }
+                },
+                $(go.Placeholder,
+                    {
+                        background: "transparent",  // to allow this Placeholder to be "seen" by mouse events
+                        isActionable: true,  // needed because this is in a temporary Layer
+                        click: function (e, obj) {
+                            var node = obj.part.adornedPart;
+                            node.diagram.select(node);
+                        }
+                    }),
+                $("Button",
+                    // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
+                    {
+                        alignment: go.Spot.Left,
+                        alignmentFocus: go.Spot.Right,
+                        "ButtonBorder.fill": "#007bff",
+                        "ButtonBorder.stroke": "#007bff",
+                        "_buttonFillOver": "#007bff",
+                        "_buttonStrokeOver": "#007bff",
+                        cursor: "pointer",
+                        width: 80,
 
-            },
-            {
-                click: function (e, obj) {
-                    console.log("aloy", e, obj.part.key);
-                    console.log("AND");
-                   // that.typeOfNode.emit({ key: obj.part.key, name: 'and' })
-                }
-            },
-            $(go.TextBlock, "AND", {
-                stroke: '#fff',
-                margin: 2,
-            })),
-            $("Button",
-            // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
-            {
-                alignment: go.Spot.Right,
-                alignmentFocus: go.Spot.Left,
-                "ButtonBorder.fill": "#007bff",
-                "ButtonBorder.stroke": "#007bff",
-                "_buttonFillOver": "#007bff",
-                "_buttonStrokeOver": "#007bff",
-                cursor: "pointer",
-                width: 100,
+                    },
+                    {
+                        click: function (e, obj) {
+                            console.log("aloy", e, obj.part.key);
+                            console.log("AND");
+                            // that.typeOfNode.emit({ key: obj.part.key, name: 'and' })
+                        }
+                    },
+                    $(go.TextBlock, "AND", {
+                        stroke: '#fff',
+                        margin: 2,
+                    })),
+                $("Button",
+                    // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
+                    {
+                        alignment: go.Spot.Right,
+                        alignmentFocus: go.Spot.Left,
+                        "ButtonBorder.fill": "#007bff",
+                        "ButtonBorder.stroke": "#007bff",
+                        "_buttonFillOver": "#007bff",
+                        "_buttonStrokeOver": "#007bff",
+                        cursor: "pointer",
+                        width: 100,
 
-            },
-            {
-                click: function (e, obj) {
-                    console.log("aloy", e, obj.part.key);
-                    console.log("OR");
-                   // that.typeOfNode.emit({ key: obj.part.key, name: 'or' })
-                }
-            },
-            $(go.TextBlock, "OR", {
-                stroke: '#fff',
-                margin: 2,
-            }))
-        );
+                    },
+                    {
+                        click: function (e, obj) {
+                            console.log("aloy", e, obj.part.key);
+                            console.log("OR");
+                            // that.typeOfNode.emit({ key: obj.part.key, name: 'or' })
+                        }
+                    },
+                    $(go.TextBlock, "OR", {
+                        stroke: '#fff',
+                        margin: 2,
+                    }))
+            );
 
         var bluegrad = $(go.Brush, "Linear", { 0: "#C4ECFF", 1: "#70D4FF" });
         var greengrad = $(go.Brush, "Linear", { 0: "#B1E2A5", 1: "#7AE060" });
@@ -327,9 +330,41 @@ export class IvrComponent implements OnInit {
             { selectionObjectName: "BODY" },
             {
                 click: (e, node: any) => {
-                    console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+                    console.log("type of node ", node.jb.question);
+                    // console.log(node.jb.name);
+
+                    // if(node.jb.name === "geography"){
+
+                    //     this.openDialogGeography(node.data);
+                    // }
+
+                    // if(node.jb.name === "demographics"){
+
+                    //     this.openDialog(node.data); 
+                    //     // this.openDialogGeography(node.data);
+                    // }
+                    // this.openDialog(node.data); 
+
+
+
+                    switch (node.jb.question) {
+                        case "geography":
+                            this.openDialogGeography(node.data);
+                            break;
+                        case "demographics":
+                            this.openDialogDemographics(node.data);
+                            break;
+                        case "purchase":
+                            this.openDialogPurchase(node.data);
+                            break;
+                        case "customerengagement":
+                            this.openDialogCustomerEngagement(node.data);
+                            break;
+                    }
+
+                    // this.nodeSelected.emit(node.jb.key);
                     //check for bottomsheet
-                    this.openDialog(node.data);
+                    // this.openDialog(node.data);
                 }
             },
             // the main "BODY" consists of a RoundedRectangle surrounding nested Panels
@@ -399,56 +434,56 @@ export class IvrComponent implements OnInit {
                     $("ContextMenu",  // that has one button
                         $("ContextMenuButton",
                             $(go.TextBlock, "Email Subscription"),
-                            { click: addEmail}
+                            { click: addEmail }
                         ),
 
                         $("ContextMenuButton",
-                        $(go.TextBlock, "Demographics"),
-                        { click: addDemographics}
-                         ),
+                            $(go.TextBlock, "Demographics"),
+                            { click: addDemographics }
+                        ),
 
-                         $("ContextMenuButton",
-                         $(go.TextBlock, "Purchase Behaviour"),
-                         { click: addPurchase}
-                          ),
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Purchase Behaviour"),
+                            { click: addPurchase }
+                        ),
 
-                          $("ContextMenuButton",
-                         $(go.TextBlock, "Customer Engagement"),
-                         { click: addCusteng}
-                          ),
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Customer Engagement"),
+                            { click: addCusteng }
+                        ),
 
-                          $("ContextMenuButton",
-                          $(go.TextBlock, "Model Quantifiers"),
-                          { click: addModquan}
-                           ),
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Model Quantifiers"),
+                            { click: addModquan }
+                        ),
 
-                           $("ContextMenuButton",
-                           $(go.TextBlock, "Geography"),
-                           { click: addGeography}
-                            ),
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Geography"),
+                            { click: addGeography }
+                        ),
 
 
-                           $("ContextMenuButton",
-                           $(go.TextBlock, "Customer Persona"),
-                           { click: addCustper}
-                            ),
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Customer Persona"),
+                            { click: addCustper }
+                        ),
 
-                            $("ContextMenuButton",
+                        $("ContextMenuButton",
                             $(go.TextBlock, "Pro Attributes"),
-                            { click: addProattr}
-                             ),
+                            { click: addProattr }
+                        ),
 
-                             $("ContextMenuButton",
-                             $(go.TextBlock, "Graph creators"),
-                             { click: addGraphcreate}
-                              ),
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Graph creators"),
+                            { click: addGraphcreate }
+                        ),
 
 
                         $("ContextMenuButton",
                             $(go.TextBlock, "Terminal Node"),
-                            { click: addTerminal}
+                            { click: addTerminal }
                         ),
-                       
+
                         // more ContextMenuButtons would go here
                     )  // end Adornment
             }
@@ -512,9 +547,9 @@ export class IvrComponent implements OnInit {
                     }
                 },
             )
-              // always this height, even if the TreeExpanderButton is not visible
-            );
-    
+            // always this height, even if the TreeExpanderButton is not visible
+        );
+
 
         this.diagram.linkTemplate =
             $(go.Link, go.Link.Orthogonal,
@@ -714,19 +749,102 @@ export class IvrComponent implements OnInit {
 
     }
 
-    openDialog(data: any): void {
-        console.log("inside open dialog", data);
+    openDialogGeography(data: any): void {
+        console.log("inside open dialog geography", data);
         const dialogRef = this.dialog.open(ModalComponent, {
             width: '250px',
             // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
-            data: { key: data.key, question: data.question, actions:data.actions }
+            data: { key: data.key, question: data.question, actions: data.actions }
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log("result",result);
-            result.actions.push({text:result.country})
-            result.actions.push({text:result.gender})
-            console.log("final result",result);
+            console.log("result", result);
+            result.actions.push({ text: result.country,fill:"green" })
+            console.log("final result", result);
+            this.someEvent.emit(result);
+            // result.actions.push({})
+            // if (result) {
+            //     this.diagram.model.commit(function (m) {
+            //         console.log("m", m);
+            //         m.set(data, "income", result.income);
+            //         // m.set(data, "color", result.color);
+            //         // m.set(data, "spending", result.spending);
+            //     }, "modified node properties");
+            //     // data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
+            // }
+            // console.log("inside open dialog after", data);
+        });
+
+    }
+    openDialogPurchase(data: any): void {
+        console.log("inside open dialog geography", data);
+        const dialogRef = this.dialog.open(ModalComponent2, {
+            width: '250px',
+            // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
+            data: { key: data.key, question: data.question, actions: data.actions }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log("result", result);
+            result.actions.push({ text: result.purchase,fill:"red" })
+            console.log("final result", result);
+            this.someEvent.emit(result);
+            // result.actions.push({})
+            // if (result) {
+            //     this.diagram.model.commit(function (m) {
+            //         console.log("m", m);
+            //         m.set(data, "income", result.income);
+            //         // m.set(data, "color", result.color);
+            //         // m.set(data, "spending", result.spending);
+            //     }, "modified node properties");
+            //     // data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
+            // }
+            // console.log("inside open dialog after", data);
+        });
+
+    }
+    openDialogCustomerEngagement(data: any): void {
+        console.log("inside open dialog geography", data);
+        const dialogRef = this.dialog.open(ModalComponent3, {
+            width: '250px',
+            // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
+            data: { key: data.key, question: data.question, actions: data.actions }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log("result", result);
+            result.actions.push({ text: result.customerengagement })
+            console.log("final result", result);
+            this.someEvent.emit(result);
+            // result.actions.push({})
+            // if (result) {
+            //     this.diagram.model.commit(function (m) {
+            //         console.log("m", m);
+            //         m.set(data, "income", result.income);
+            //         // m.set(data, "color", result.color);
+            //         // m.set(data, "spending", result.spending);
+            //     }, "modified node properties");
+            //     // data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
+            // }
+            // console.log("inside open dialog after", data);
+        });
+
+    }
+    openDialogDemographics(data: any): void {
+        console.log("inside open dialog", data);
+        const dialogRef = this.dialog.open(ModalComponent1, {
+            width: '250px',
+            // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
+            data: { key: data.key, question: data.question, actions: data.actions }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log("result", result);
+            result.actions.push({ text: result.country })
+            result.actions.push({ text: result.gender })
+            result.actions.push({ text: result. race})
+            result.actions.push({ text: result.income })
+            console.log("final result", result);
             this.someEvent.emit(result);
             // result.actions.push({})
             // if (result) {
