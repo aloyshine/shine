@@ -4,7 +4,7 @@ import * as go from 'gojs';
 
 import { GuidedDraggingTool } from './GuidedDraggingTool';
 import { ModalComponent } from '../modal/modal.component';
-import {TerminalcomponentComponent} from '../terminalcomponent/terminalcomponent.component'
+import { TerminalcomponentComponent } from '../terminalcomponent/terminalcomponent.component'
 import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.component';
 import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
 import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
@@ -117,106 +117,106 @@ export class IvrComponent implements OnInit {
             that.typeOfNode.emit({ key: obj.part.key, name: 'terminal' })
         }
         // this is shown by the mouseHover event handler
-        var nodeHoverAdornment =
-            $(go.Adornment, "Spot",
-                {
-                    background: "transparent",
-                    // hide the Adornment when the mouse leaves it
-                    mouseLeave: function (e, obj) {
-                        var ad = obj.part;
-                        ad.adornedPart.removeAdornment("mouseHover");
-                    }
-                },
-                $(go.Placeholder,
-                    {
-                        background: "transparent",  // to allow this Placeholder to be "seen" by mouse events
-                        isActionable: true,  // needed because this is in a temporary Layer
-                        click: function (e, obj) {
-                            var node = obj.part.adornedPart;
-                            node.diagram.select(node);
-                        }
-                    }),
-                {
-                    contextMenu:     // define a context menu for each node
-                        $("ContextMenu",  // that has one button
-                            $("ContextMenuButton",
-                                $(go.TextBlock, "Email Sub"),
-                                { click: addEmail }
-                            )
-                            // more ContextMenuButtons would go here
-                        )  // end Adornment
-                },
-                $("Button",
-                    // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
-                    {
-                        alignment: go.Spot.Left,
-                        alignmentFocus: go.Spot.Right,
-                        "ButtonBorder.fill": "#007bff",
-                        "ButtonBorder.stroke": "#007bff",
-                        "_buttonFillOver": "#007bff",
-                        "_buttonStrokeOver": "#007bff",
-                        cursor: "pointer",
-                        width: 80,
+        // var nodeHoverAdornment =
+        //     $(go.Adornment, "Spot",
+        //         {
+        //             background: "transparent",
+        //             // hide the Adornment when the mouse leaves it
+        //             mouseLeave: function (e, obj) {
+        //                 var ad = obj.part;
+        //                 ad.adornedPart.removeAdornment("mouseHover");
+        //             }
+        //         },
+        //         $(go.Placeholder,
+        //             {
+        //                 background: "transparent",  // to allow this Placeholder to be "seen" by mouse events
+        //                 isActionable: true,  // needed because this is in a temporary Layer
+        //                 click: function (e, obj) {
+        //                     var node = obj.part.adornedPart;
+        //                     node.diagram.select(node);
+        //                 }
+        //             }),
+        //         {
+        //             contextMenu:     // define a context menu for each node
+        //                 $("ContextMenu",  // that has one button
+        //                     $("ContextMenuButton",
+        //                         $(go.TextBlock, "Email Sub"),
+        //                         { click: addEmail }
+        //                     )
+        //                     // more ContextMenuButtons would go here
+        //                 )  // end Adornment
+        //         },
+        //         $("Button",
+        //             // { alignment: go.Spot.Left, alignmentFocus: go.Spot.Right, },
+        //             {
+        //                 alignment: go.Spot.Left,
+        //                 alignmentFocus: go.Spot.Right,
+        //                 "ButtonBorder.fill": "#007bff",
+        //                 "ButtonBorder.stroke": "#007bff",
+        //                 "_buttonFillOver": "#007bff",
+        //                 "_buttonStrokeOver": "#007bff",
+        //                 cursor: "pointer",
+        //                 width: 80,
 
-                    },
-                    {
-                        click: function (e, obj) {
-                            console.log("prashant", e, obj.part.key);
-                            console.log("Email Subscription");
-                            that.typeOfNode.emit({ key: obj.part.key, name: 'email' })
-                        }
-                    },
-                    $(go.TextBlock, "Email Sub", {
-                        stroke: '#fff',
-                        margin: 2,
-                    })),
-                $("Button",
-                    // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
-                    {
-                        alignment: go.Spot.Right,
-                        alignmentFocus: go.Spot.Left,
-                        "ButtonBorder.fill": "#007bff",
-                        "ButtonBorder.stroke": "#007bff",
-                        "_buttonFillOver": "#007bff",
-                        "_buttonStrokeOver": "#007bff",
-                        cursor: "pointer",
-                        width: 100,
+        //             },
+        //             {
+        //                 click: function (e, obj) {
+        //                     console.log("prashant", e, obj.part.key);
+        //                     console.log("Email Subscription");
+        //                     that.typeOfNode.emit({ key: obj.part.key, name: 'email' })
+        //                 }
+        //             },
+        //             $(go.TextBlock, "Email Sub", {
+        //                 stroke: '#fff',
+        //                 margin: 2,
+        //             })),
+        //         $("Button",
+        //             // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
+        //             {
+        //                 alignment: go.Spot.Right,
+        //                 alignmentFocus: go.Spot.Left,
+        //                 "ButtonBorder.fill": "#007bff",
+        //                 "ButtonBorder.stroke": "#007bff",
+        //                 "_buttonFillOver": "#007bff",
+        //                 "_buttonStrokeOver": "#007bff",
+        //                 cursor: "pointer",
+        //                 width: 100,
 
-                    },
-                    {
-                        click: function (e, obj) {
-                            console.log("Demographics");
-                            that.typeOfNode.emit({ key: obj.part.key, name: 'demographics' })
-                        }
-                    },
-                    $(go.TextBlock, "Demographics", {
-                        stroke: '#fff',
-                        margin: 2,
-                    })),
-                $("Button",
-                    // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
-                    {
-                        alignment: go.Spot.Right,
-                        alignmentFocus: go.Spot.Left,
-                        "ButtonBorder.fill": "#007bff",
-                        "ButtonBorder.stroke": "#007bff",
-                        "_buttonFillOver": "#007bff",
-                        "_buttonStrokeOver": "#007bff",
-                        cursor: "pointer",
-                        width: 100,
+        //             },
+        //             {
+        //                 click: function (e, obj) {
+        //                     console.log("Demographics");
+        //                     that.typeOfNode.emit({ key: obj.part.key, name: 'demographics' })
+        //                 }
+        //             },
+        //             $(go.TextBlock, "Demographics", {
+        //                 stroke: '#fff',
+        //                 margin: 2,
+        //             })),
+        //         $("Button",
+        //             // { alignment: go.Spot.Right, alignmentFocus: go.Spot.Left },
+        //             {
+        //                 alignment: go.Spot.Right,
+        //                 alignmentFocus: go.Spot.Left,
+        //                 "ButtonBorder.fill": "#007bff",
+        //                 "ButtonBorder.stroke": "#007bff",
+        //                 "_buttonFillOver": "#007bff",
+        //                 "_buttonStrokeOver": "#007bff",
+        //                 cursor: "pointer",
+        //                 width: 100,
 
-                    },
-                    {
-                        click: function (e, obj) {
-                            console.log("ADD TERMINAL");
-                            that.typeOfNode.emit({ key: obj.part.key, name: 'addterminal' })
-                        }
-                    },
-                    $(go.TextBlock, "Add Terminal", {
-                        stroke: '#fff',
-                        margin: 2,
-                    }))
-            );
+        //             },
+        //             {
+        //                 click: function (e, obj) {
+        //                     console.log("ADD TERMINAL");
+        //                     that.typeOfNode.emit({ key: obj.part.key, name: 'addterminal' })
+        //                 }
+        //             },
+        //             $(go.TextBlock, "Add Terminal", {
+        //                 stroke: '#fff',
+        //                 margin: 2,
+        //             }))
+        //     );
 
         var terminalnodeAdornment =
             $(go.Adornment, "Spot",
@@ -421,14 +421,14 @@ export class IvrComponent implements OnInit {
                 { height: 17 },  // always this height, even if the TreeExpanderButton is not visible
                 $("TreeExpanderButton")
             ),
-            {
-                // show the Adornment when a mouseHover event occurs
-                mouseHover: function (e, obj) {
-                    var node = obj.part;
-                    nodeHoverAdornment.adornedObject = node;
-                    node.addAdornment("mouseHover", nodeHoverAdornment);
-                }
-            },
+            // {
+            //     // show the Adornment when a mouseHover event occurs
+            //     mouseHover: function (e, obj) {
+            //         var node = obj.part;
+            //         nodeHoverAdornment.adornedObject = node;
+            //         node.addAdornment("mouseHover", nodeHoverAdornment);
+            //     }
+            // },
             {
                 contextMenu:     // define a context menu for each node
                     $("ContextMenu",  // that has one button
@@ -524,13 +524,13 @@ export class IvrComponent implements OnInit {
         // define a second kind of Node:
         this.diagram.nodeTemplateMap.add("Terminal",
             $(go.Node, "Spot",
-            {
-                click: (e, node: any) => {
-                    console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
-                    //check for bottomsheet
-                    this.openTerminalDialog(node.data);
-                }
-            },
+                {
+                    click: (e, node: any) => {
+                        console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+                        //check for bottomsheet
+                        this.openTerminalDialog(node.data);
+                    }
+                },
                 $(go.Shape, "Circle",
                     { width: 55, height: 55, fill: greengrad, stroke: null }
                 ),
@@ -759,7 +759,7 @@ export class IvrComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log("result", result);
-            result.actions.push({ text: result.country,fill:"green" })
+            result.actions.push({ text: result.country, fill: "green" })
             console.log("final result", result);
             this.someEvent.emit(result);
             // result.actions.push({})
@@ -786,7 +786,7 @@ export class IvrComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log("result", result);
-            result.actions.push({ text: result.purchase,fill:"red" })
+            result.actions.push({ text: result.purchase, fill: "red" })
             console.log("final result", result);
             this.someEvent.emit(result);
             // result.actions.push({})
@@ -842,7 +842,7 @@ export class IvrComponent implements OnInit {
             console.log("result", result);
             result.actions.push({ text: result.country })
             result.actions.push({ text: result.gender })
-            result.actions.push({ text: result. race})
+            result.actions.push({ text: result.race })
             result.actions.push({ text: result.income })
             console.log("final result", result);
             this.someEvent.emit(result);
@@ -861,8 +861,8 @@ export class IvrComponent implements OnInit {
 
     }
 
-    openTerminalDialog(data){
-        console.log("data in terminal",data)
+    openTerminalDialog(data) {
+        console.log("data in terminal", data)
         this.terminalevent.emit(data)
     }
 }
