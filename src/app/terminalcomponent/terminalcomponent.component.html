@@ -4,7 +4,7 @@
         <mat-select formControlName="Operator">
             <mat-option *ngFor="let c of operators" [value]="c">
                 {{c}}
-              </mat-option>
+            </mat-option>
         </mat-select>
     </mat-form-field>
     <mat-label>Operator</mat-label>
@@ -12,7 +12,12 @@
         <mat-select formControlName="Operator">
             <mat-option *ngFor="let c of finalnodes" [value]="c">
                 {{c.question}}
-              </mat-option>
+            </mat-option>
         </mat-select>
     </mat-form-field>
 </form>
+
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>OK</button>
+    <button mat-button [mat-dialog-close]="null">Cancel</button>
+</div>

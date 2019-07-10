@@ -43,7 +43,7 @@ export class IvrComponent implements OnInit {
     @Output()
     modelChanged = new EventEmitter<go.ChangedEvent>();
 
-    constructor(public dialog: MatDialog, public dialog1: MatDialog) {
+    constructor(public dialog: MatDialog) {
 
         const $ = go.GraphObject.make;
         // Place GoJS license key here:

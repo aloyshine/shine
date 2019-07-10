@@ -1,17 +1,17 @@
 import { Component, Input } from '@angular/core';
 import * as go from 'gojs';
 import { MatDialog } from '@angular/material';
-import {TerminalcomponentComponent} from './terminalcomponent/terminalcomponent.component'
+import { TerminalcomponentComponent } from './terminalcomponent/terminalcomponent.component'
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private terminaldialog:MatDialog){
+  constructor(private terminaldialog: MatDialog) {
 
   }
- // @Input() openterminaldialog : boolean;
+  // @Input() openterminaldialog : boolean;
   counter: number = 0;
   counter1: number = 1;
   attributes: [{ key: string; figure?: string; spending?: number; color?: string; parent?: string; text: string; source: string; }] = [ // the "key" and "parent" property names are required,
@@ -28,14 +28,14 @@ export class AppComponent {
   ];
 
 
-   nodeDataArray= [
+  nodeDataArray = [
     {
       key: 1, question: "All Customers",
       actions: [
         // { text: "Sales", figure: "ElectricalHazard", fill: "green" },
         // { text: "Parts and Services", figure: "FireHazard", fill: "red" },
         // { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
-      ],category:""
+      ], category: ""
     },
     // {
     //   key: 2, question: "Email Subscription",
@@ -85,7 +85,7 @@ export class AppComponent {
     // { key: 19, category: "Terminal", text: "Ken" },
     // { key: 20, category: "Terminal", text: "Rachel" }
   ];
-   linkDataArray = [
+  linkDataArray = [
     // { from: 1, to: 2, answer: 1 },
     // { from: 1, to: 3, answer: 2 },
     // { from: 1, to: 4, answer: 3 },
@@ -108,7 +108,7 @@ export class AppComponent {
   ];
 
   model = new go.TreeModel(this.attributes);
-  modelIVR = new go.GraphLinksModel(this.nodeDataArray,this.linkDataArray)
+  modelIVR = new go.GraphLinksModel(this.nodeDataArray, this.linkDataArray)
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -138,14 +138,14 @@ export class AppComponent {
     })
 
     this.nodeDataArray.push({
-        key: (++this.counter), question: obj.name,
-        actions: [
-          { text: "Sales", figure: "ElectricalHazard", fill: "green" },
-          { text: "Parts and Services", figure: "FireHazard", fill: "red" },
-          { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
-        ],
-        category:""
-      });
+      key: (++this.counter), question: obj.name,
+      actions: [
+        { text: "Sales", figure: "ElectricalHazard", fill: "green" },
+        { text: "Parts and Services", figure: "FireHazard", fill: "red" },
+        { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
+      ],
+      category: ""
+    });
     console.log(this.nodeDataArray);
     this.model = new go.TreeModel(this.attributes);
   }
@@ -161,48 +161,71 @@ export class AppComponent {
         break;
       case "terminal":
         obj.category = "Terminal"
-      break;
+        break;
     }
-    
 
 
-  this.nodeDataArray.push({
-    key: (++this.counter1), question: obj.name,
-    actions: [
-      // { text: "Sales", figure: "ElectricalHazard", fill: "green" },
-      // { text: "Parts and Services", figure: "FireHazard", fill: "red" },
-      // { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
-    ],category:obj.category
-  });
 
-      this.linkDataArray.push({
-        from:obj.key,
-        to:this.counter1
-      })
+    this.nodeDataArray.push({
+      key: (++this.counter1), question: obj.name,
+      actions: [
+        // { text: "Sales", figure: "ElectricalHazard", fill: "green" },
+        // { text: "Parts and Services", figure: "FireHazard", fill: "red" },
+        // { text: "Representative", figure: "IrritationHazard", fill: "yellow" }
+      ], category: obj.category
+    });
+
+    this.linkDataArray.push({
+      from: obj.key,
+      to: this.counter1
+    })
     console.log(this.nodeDataArray);
-    this.modelIVR = new go.GraphLinksModel(this.nodeDataArray,this.linkDataArray);
+    this.modelIVR = new go.GraphLinksModel(this.nodeDataArray, this.linkDataArray);
 
 
-   
+
   }
 
 
-  onSomeEvent(result){
-    console.log('ccc',result);
+  onSomeEvent(result) {
+    console.log('ccc', result);
     this.nodeDataArray.forEach((nodeItem) => {
-      if(nodeItem.key === result.key) {
-        nodeItem.actions  = result.actions;
-    this.modelIVR = new go.GraphLinksModel(this.nodeDataArray,this.linkDataArray);
+      if (nodeItem.key === result.key) {
+        nodeItem.actions = result.actions;
+        this.modelIVR = new go.GraphLinksModel(this.nodeDataArray, this.linkDataArray);
 
       }
     })
   }
 
-  openterminaldialog(e){
-    console.log("data",e)
-    if(e!=null){
-     this.terminaldialog.open(TerminalcomponentComponent,{ disableClose: true,
-      data:{nodeDataArray:this.nodeDataArray,linkDataArray:this.linkDataArray,key:e.key}})
+  openterminaldialog(e) {
+    console.log("data", e)
+    if (e != null) {
+      const dialogRef = this.terminaldialog.open(TerminalcomponentComponent, {
+        disableClose: true,
+        data: { nodeDataArray: this.nodeDataArray, linkDataArray: this.linkDataArray, key: e.key }
+      })
+      dialogRef.afterClosed().subscribe(result => {
+        console.log("result", result);
+        // result.actions.push({ text: result.purchase, fill: "red" })
+        // console.log("final result", result);
+        // this.someEvent.emit(result);
+        // result.actions.push({})
+        // if (result) {
+        //     this.diagram.model.commit(function (m) {
+        //         console.log("m", m);
+        //         m.set(data, "income", result.income);
+        //         // m.set(data, "color", result.color);
+        //         // m.set(data, "spending", result.spending);
+        //     }, "modified node properties");
+        //     // data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
+        // }
+        // console.log("inside open dialog after", data);
+      });
+
     }
+
+
+
   }
 }
