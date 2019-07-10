@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import * as go from 'gojs';
-
+import { MatDialog } from '@angular/material';
+import {TerminalcomponentComponent} from './terminalcomponent/terminalcomponent.component'
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  constructor(private terminaldialog:MatDialog){
+
+  }
+ // @Input() openterminaldialog : boolean;
   counter: number = 0;
   counter1: number = 1;
   attributes: [{ key: string; figure?: string; spending?: number; color?: string; parent?: string; text: string; source: string; }] = [ // the "key" and "parent" property names are required,
@@ -191,5 +196,13 @@ export class AppComponent {
 
       }
     })
+  }
+
+  openterminaldialog(e){
+    console.log("data",e)
+    if(e!=null){
+     this.terminaldialog.open(TerminalcomponentComponent,{ disableClose: true,
+      data:{nodeDataArray:this.nodeDataArray,linkDataArray:this.linkDataArray,key:e.key}})
+    }
   }
 }

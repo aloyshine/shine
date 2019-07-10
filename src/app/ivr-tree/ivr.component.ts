@@ -4,6 +4,7 @@ import * as go from 'gojs';
 
 import { GuidedDraggingTool } from './GuidedDraggingTool';
 import { ModalComponent } from '../modal/modal.component';
+import {TerminalcomponentComponent} from '../terminalcomponent/terminalcomponent.component'
 
 @Component({
     selector: 'app-ivr',
@@ -29,6 +30,9 @@ export class IvrComponent implements OnInit {
 
     @Output()
     typeOfNode = new EventEmitter<any>();
+
+    @Output()
+    terminalevent = new EventEmitter<any>();
 
     @Output()
     someEvent = new EventEmitter<any>();
@@ -485,6 +489,13 @@ export class IvrComponent implements OnInit {
         // define a second kind of Node:
         this.diagram.nodeTemplateMap.add("Terminal",
             $(go.Node, "Spot",
+            {
+                click: (e, node: any) => {
+                    console.log(node.jb.name); this.nodeSelected.emit(node.jb.key);
+                    //check for bottomsheet
+                    this.openTerminalDialog(node.data);
+                }
+            },
                 $(go.Shape, "Circle",
                     { width: 55, height: 55, fill: greengrad, stroke: null }
                 ),
@@ -730,5 +741,10 @@ export class IvrComponent implements OnInit {
             // console.log("inside open dialog after", data);
         });
 
+    }
+
+    openTerminalDialog(data){
+        console.log("data in terminal",data)
+        this.terminalevent.emit(data)
     }
 }

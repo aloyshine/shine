@@ -1,0 +1,18 @@
+<form [formGroup]="activityForm">
+    <mat-label>Operator</mat-label>
+    <mat-form-field>
+        <mat-select formControlName="Operator">
+            <mat-option *ngFor="let c of operators" [value]="c">
+                {{c}}
+              </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-label>Operator</mat-label>
+    <mat-form-field>
+        <mat-select formControlName="Operator">
+            <mat-option *ngFor="let c of finalnodes" [value]="c">
+                {{c.question}}
+              </mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
