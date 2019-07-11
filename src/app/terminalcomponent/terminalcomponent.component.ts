@@ -40,7 +40,7 @@ export class TerminalcomponentComponent implements OnInit {
       let key = node.key
       let keyflag = false;
       this.linkdataArray.forEach(element => {
-        if ((element.from === key) || (element.category === "Terminal")) {
+        if ((element.from === key)) {
           keyflag = true
         }
       });
