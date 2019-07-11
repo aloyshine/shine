@@ -22,12 +22,13 @@
   }
 
 
+
   .diagramDiv {
     border: 1px solid black;
     display: inline-block;
     vertical-align: top;
     width: 80%;
-    height: 600px;
+    height: 85%;
   }
 
   .paletteDiv {
@@ -66,6 +67,7 @@
     right: 50px;
     cursor: pointer;
     width: 130px;
+    z-index: 10;
     padding: 10px;
     text-align: center;
     color: #fff;

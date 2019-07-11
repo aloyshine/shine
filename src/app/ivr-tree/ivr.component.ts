@@ -467,7 +467,7 @@ export class IvrComponent implements OnInit {
             $(go.Panel, "Auto",
                 { name: "BODY" },
                 $(go.Panel, "Horizontal",
-                    $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35, width: 70 },
+                    $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35, width: 70,height:60 },
                         {
                             fill: bluegrad, stroke: '#ccc'
                             // allow many kinds of links
@@ -476,7 +476,7 @@ export class IvrComponent implements OnInit {
                             // fromLinkableDuplicates: false, toLinkableDuplicates:false
                         },
                         new go.Binding("fill", "color")
-                    ), $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35, width: 210 },
+                    ), $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35, width: 210,height:60 },
                         {
                             fill: '#fff', stroke: '#ccc', portId: "", cursor: "pointer",
                             // allow many kinds of links
@@ -523,7 +523,8 @@ export class IvrComponent implements OnInit {
                         $(go.TextBlock,
                             {
                                 stretch: go.GraphObject.Horizontal,
-                                font: "bold 12pt Verdana,Slab Serifs"
+                                font: "10pt sans-serif",
+                                stroke:'#3C5364'
                             },
                             new go.Binding("text", "question")
                         ),
@@ -578,64 +579,64 @@ export class IvrComponent implements OnInit {
             //         node.addAdornment("mouseHover", nodeHoverAdornment);
             //     }
             // },
-            {
-                contextMenu:     // define a context menu for each node
-                    $("ContextMenu",  // that has one button
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Email Subscription"),
-                            { click: addEmail }
-                        ),
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Demographics"),
-                            { click: addDemographics }
-                        ),
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Purchase Behaviour"),
-                            { click: addPurchase }
-                        ),
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Customer Engagement"),
-                            { click: addCusteng }
-                        ),
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Model Qualifiers"),
-                            { click: addModquan }
-                        ),
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Geography"),
-                            { click: addGeography }
-                        ),
-
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Customer Persona"),
-                            { click: addCustper }
-                        ),
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Pro Attributes"),
-                            { click: addProattr }
-                        ),
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Graph creators"),
-                            { click: addGraphcreate }
-                        ),
-
-
-                        $("ContextMenuButton",
-                            $(go.TextBlock, "Terminal Node"),
-                            { click: addTerminal }
-                        ),
-
-                        // more ContextMenuButtons would go here
-                    )  // end Adornment
-            }
+            // {
+            //     contextMenu:     // define a context menu for each node
+            //         $("ContextMenu",  // that has one button
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Email Subscription"),
+            //                 { click: addEmail }
+            //             ),
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Demographics"),
+            //                 { click: addDemographics }
+            //             ),
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Purchase Behaviour"),
+            //                 { click: addPurchase }
+            //             ),
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Customer Engagement"),
+            //                 { click: addCusteng }
+            //             ),
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Model Qualifiers"),
+            //                 { click: addModquan }
+            //             ),
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Geography"),
+            //                 { click: addGeography }
+            //             ),
+            //
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Customer Persona"),
+            //                 { click: addCustper }
+            //             ),
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Pro Attributes"),
+            //                 { click: addProattr }
+            //             ),
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Graph creators"),
+            //                 { click: addGraphcreate }
+            //             ),
+            //
+            //
+            //             $("ContextMenuButton",
+            //                 $(go.TextBlock, "Terminal Node"),
+            //                 { click: addTerminal }
+            //             ),
+            //
+            //             // more ContextMenuButtons would go here
+            //         )  // end Adornment
+            // }
 
         );
 

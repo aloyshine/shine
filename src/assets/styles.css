@@ -62,9 +62,12 @@ div.top-nav-bar>ul>li.active {
 div.diagramsPanel {
   background: #EEEEEE;
   height: 100%;
-  padding-top: 130px;
+  padding-top: 115px;
 }
 
+div.paletteDiv div {
+  overflow-x: hidden !important;
+}
 .full-width {
   width: 100%;
 }
