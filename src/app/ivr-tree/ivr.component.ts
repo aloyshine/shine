@@ -765,39 +765,39 @@ export class IvrComponent implements OnInit {
                 {
                     key: 1,
                     question: "All Customers",
-                    color: "lightblue", source: 'https://cdn1.iconfinder.com/data/icons/business-minimal/512/social__person_Group_Business_community_teamwork_relationship-512.png'
+                    color: "lightblue", source: './assets/social__person_Group_Business_community_teamwork_relationship-512.png'
                 },
 
                 {
                     key: 2,
                     question: "Demographics",
-                    color: "#F1C40F", source: 'https://i.ibb.co/ScF5fFQ/156283676431409527.png'
+                    color: "#F1C40F", source: './assets/156283676431409527.png'
                 },
 
                 {
                     key: 3,
                     question: "Email",
                     color: "#32B8B3",
-                    source: 'https://www.stickpng.com/assets/thumbs/584856b4e0bb315b0f7675ac.png'
+                    source: './assets/584856b4e0bb315b0f7675ac.png'
                 },
 
                 {
                     key: 4,
                     question: "Purchase",
                     color: "#8046b2",
-                    source: 'https://pngriver.com/wp-content/uploads/2018/04/Download-Shopping-Cart-Png-Image-75838-For-Designing-Projects.png'
+                    source: './assets/Download-Shopping-Cart-Png-Image-75838-For-Designing-Projects.png'
                 },
 
                 {
                     key: 5,
                     question: "Customer Engagement",
-                    color: "#4687b2", source: 'https://cdn2.iconfinder.com/data/icons/lightly-icons/30/user-480.png'
+                    color: "#4687b2", source: './assets/user-480.png'
                 },
 
                 {
                     key: 6,
                     question: "Model Qualifiers",
-                    color: "#B24646", source: 'https://i.ibb.co/16C7fDZ/imageedit-3-8418722331.png'
+                    color: "#B24646", source: './assets/imageedit-3-8418722331.png'
 
                 },
 
