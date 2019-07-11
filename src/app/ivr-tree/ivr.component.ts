@@ -91,6 +91,8 @@ export class IvrComponent implements OnInit {
     @Output()
     modelChanged = new EventEmitter<go.ChangedEvent>();
     allCustomersArray = [];
+    nodeDataArrayInsideIVR = [];
+    linkDataArrayInsideIVR = [];
 
 
     constructor(public dialog: MatDialog) {
@@ -110,10 +112,19 @@ export class IvrComponent implements OnInit {
         this.diagram.toolManager.draggingTool = new GuidedDraggingTool();
         this.diagram.addDiagramListener("ChangedSelection",
             e => {
-                // console.log('changed selection', e);
+                // console.log('changed selection event', e);
                 const node = e.diagram.selection.first();
                 console.log('changed selection node', node.data);
-                // this.nodeSelected.emit(node.name);
+                if (node.data.question) {
+                    this.nodeDataArrayInsideIVR.push(node.data);
+                } else {
+                    this.linkDataArrayInsideIVR.push(node.data);
+                }
+                console.log("nodeDataArrayInsideIVR", this.nodeDataArrayInsideIVR)
+                console.log("linkDataArrayInsideIVR", this.linkDataArrayInsideIVR);
+                // this.allConnectionsArray.push(node.data);
+                // console.log("all connections array", this.allConnectionsArray);
+                // this.nodeSelected.emit(node.data);
             });
         this.diagram.addModelChangedListener(e => e.isTransactionFinished && this.modelChanged.emit(e));
 
@@ -680,16 +691,16 @@ export class IvrComponent implements OnInit {
         this.palette.model.nodeDataArray =
             [
                 { key: 1, question: "All Customers", color: "lightblue" },
-                { key: 2, question: "Email", color: "orange" },
-                { key: 3, question: "Demographics", color: "lightgreen" },
+                { key: 2, question: "Demographics", color: "lightgreen" },
+                { key: 3, question: "Email", color: "orange" },
                 { key: 4, question: "Purchase", color: "pink" },
                 { key: 5, question: "Customer Engagement", color: "yellow" },
-                { key: 5, question: "Model Qualifiers", color: "yellow" },
-                { key: 5, question: "Geography", color: "yellow" },
-                { key: 5, question: "Customer Persona", color: "yellow" },
-                { key: 5, question: "Pro Attributes", color: "yellow" },
-                { key: 5, question: "Graph Create", color: "yellow" },
-                { key: 5, question: "Terminal", color: "yellow" },
+                { key: 6, question: "Model Qualifiers", color: "yellow" },
+                { key: 7, question: "Geography", color: "yellow" },
+                { key: 8, question: "Customer Persona", color: "yellow" },
+                { key: 9, question: "Pro Attributes", color: "yellow" },
+                { key: 10, question: "Graph Create", color: "yellow" },
+                { key: 11, question: "Terminal", color: "yellow" },
             ];
     }
 
@@ -732,7 +743,7 @@ export class IvrComponent implements OnInit {
             let ageFilteredCustomers = this.allCustomersArray.filter((customer) => {
                 return customer.Age < 37
             });
-            console.log('filterd customers based on age', ageFilteredCustomers);
+            console.log('filtered customers based on age', ageFilteredCustomers);
             this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
@@ -803,7 +814,7 @@ export class IvrComponent implements OnInit {
 
     }
     openDialogDemographics(data: any): void {
-        console.log("inside open dialog", data);
+        console.log("inside open dialog demographics", data);
         const dialogRef = this.dialog.open(ModalComponent1, {
             width: '250px',
             // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
@@ -829,14 +840,25 @@ export class IvrComponent implements OnInit {
 
                 result.actions.push({ text: result.income, fill: "dodgerblue" })
             }
-            console.log("final result", result);
-            console.log("all of the customers", this.allCustomersArray);
-            let ageFilteredCustomers = this.allCustomersArray.filter((customer) => {
+            // console.log("final result", result);
+            // console.log("all of the customers", this.allCustomersArray);
+
+            var parentLink = this.linkDataArrayInsideIVR.find((el) => {
+                return el.to === data.key;
+            })
+            console.log("parent", parent);
+            // use parent.from to get the data to filter upon
+            var nodeToActUpon = this.nodeDataArrayInsideIVR.find(el => {
+                return el.from === parentLink.from;
+            })
+            console.log("dataToActUpon", nodeToActUpon);
+            let ageIncomeFilteredCustomers = nodeToActUpon.filtered.filter((customer) => {
                 return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
             });
-            console.log('filterd customers based on age', ageFilteredCustomers);
-            result.filtered = ageFilteredCustomers;
-            this.nodeMetrics.emit(result);
+            console.log('filtered customers based on age and income', ageIncomeFilteredCustomers);
+            data.filtered = ageIncomeFilteredCustomers
+            // result.filtered = ageIncomeFilteredCustomers;
+            // this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
             //     this.diagram.model.commit(function (m) {
