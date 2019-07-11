@@ -133,7 +133,7 @@ export class IvrComponent implements OnInit {
                     return false;
                 };
 
-                // adds an element to the array if it does not already exist using a comparer 
+                // adds an element to the array if it does not already exist using a comparer
                 // function
                 function pushIfNotExist(arr, element, comparer) {
                     if (!inArray(arr, comparer)) {
@@ -435,10 +435,10 @@ export class IvrComponent implements OnInit {
 
                     // if(node.jb.name === "demographics"){
 
-                    //     this.openDialog(node.data); 
+                    //     this.openDialog(node.data);
                     //     // this.openDialogGeography(node.data);
                     // }
-                    // this.openDialog(node.data); 
+                    // this.openDialog(node.data);
 
 
 
@@ -469,8 +469,7 @@ export class IvrComponent implements OnInit {
                 $(go.Panel, "Horizontal",
                     $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35, width: 70 },
                         {
-                            fill: bluegrad, stroke: null,
-                            //portId: "", cursor: "pointer",
+                            fill: bluegrad, stroke: '#ccc'
                             // allow many kinds of links
                             //fromLinkable: true, toLinkable: true,
                             // fromLinkableSelfNode: true, toLinkableSelfNode: true,
@@ -479,14 +478,12 @@ export class IvrComponent implements OnInit {
                         new go.Binding("fill", "color")
                     ), $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35, width: 210 },
                         {
-                            fill: "#EEE", stroke: null,
-                            portId: "", cursor: "pointer",
+                            fill: '#fff', stroke: '#ccc', portId: "", cursor: "pointer",
                             // allow many kinds of links
                             fromLinkable: true, toLinkable: true,
                             // fromLinkableSelfNode: true, toLinkableSelfNode: true,
                             // fromLinkableDuplicates: true, toLinkableDuplicates: true
-                        },
-                        // new go.Binding("fill", "color")
+                        }
                     )),
 
                 $(go.Panel, "Horizontal",
@@ -497,7 +494,7 @@ export class IvrComponent implements OnInit {
 
                             {
                                 margin: new go.Margin(0, 0, 0, 10),
-                                   
+
                                 width: 50,
                                 height: 50,
                                 background: "transparent"
