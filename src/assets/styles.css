@@ -13,7 +13,7 @@ h1{
     
 }
 
-div.cdk-overlay-pane{
+ div.cdk-overlay-pane{
     position: fixed !important;
     right: 0 !important;
     width:400px !important;
@@ -23,4 +23,8 @@ div.cdk-overlay-pane{
 div.mat-dialog-content{
     height: 90%;
     max-height: 90%;
+}  
+
+div.mat-dialog-content > .mat-form-field {
+    display: block !important;
 }

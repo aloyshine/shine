@@ -54,6 +54,8 @@ go.Shape.defineFigureGenerator("RoundedLeftRectangle", function (shape, w, h) {
     return geo;
 });
 
+
+
 @Component({
     selector: 'app-ivr',
     templateUrl: './ivr.component.html',
@@ -115,16 +117,46 @@ export class IvrComponent implements OnInit {
                 // console.log('changed selection event', e);
                 const node = e.diagram.selection.first();
                 console.log('changed selection node', node.data);
+                if (node.data.question === "All Customers") {
+                    node.data.filtered = this.allCustomersArray;
+                }
+
+                // this.nodeDataArrayInsideIVR.push(node.data);
+                // this.linkDataArrayInsideIVR.push(node.data);
+
+                // check if an element exists in array using a comparer function
+                // comparer : function(currentElement)
+                function inArray(arr1, comparer) {
+                    for (var i = 0; i < arr1.length; i++) {
+                        if (comparer(arr1[i])) return true;
+                    }
+                    return false;
+                };
+
+                // adds an element to the array if it does not already exist using a comparer 
+                // function
+                function pushIfNotExist(arr, element, comparer) {
+                    if (!inArray(arr, comparer)) {
+                        arr.push(element);
+                    }
+                };
                 if (node.data.question) {
-                    this.nodeDataArrayInsideIVR.push(node.data);
+                    // debugger;
+                    pushIfNotExist(this.nodeDataArrayInsideIVR, node.data, function (e) {
+                        return e.key === node.data.key;
+                    });
+
                 } else {
-                    this.linkDataArrayInsideIVR.push(node.data);
+                    pushIfNotExist(this.linkDataArrayInsideIVR, node.data, function (e) {
+                        return e.from === node.data.from;
+                    });
+
                 }
                 console.log("nodeDataArrayInsideIVR", this.nodeDataArrayInsideIVR)
                 console.log("linkDataArrayInsideIVR", this.linkDataArrayInsideIVR);
                 // this.allConnectionsArray.push(node.data);
                 // console.log("all connections array", this.allConnectionsArray);
-                // this.nodeSelected.emit(node.data);
+                this.nodeSelected.emit(node.data);
             });
         this.diagram.addModelChangedListener(e => e.isTransactionFinished && this.modelChanged.emit(e));
 
@@ -437,33 +469,64 @@ export class IvrComponent implements OnInit {
                 $(go.Panel, "Horizontal",
                     $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35, width: 70 },
                         {
-                            fill: bluegrad, stroke: null, portId: "", cursor: "pointer",
+                            fill: bluegrad, stroke: null,
+                            //portId: "", cursor: "pointer",
                             // allow many kinds of links
-                            fromLinkable: true, toLinkable: true,
+                            //fromLinkable: true, toLinkable: true,
                             // fromLinkableSelfNode: true, toLinkableSelfNode: true,
                             // fromLinkableDuplicates: false, toLinkableDuplicates:false
                         },
                         new go.Binding("fill", "color")
                     ), $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35, width: 210 },
                         {
-                            fill: bluegrad, stroke: null, portId: "", cursor: "pointer",
+                            fill: "#EEE", stroke: null,
+                            portId: "", cursor: "pointer",
                             // allow many kinds of links
                             fromLinkable: true, toLinkable: true,
                             // fromLinkableSelfNode: true, toLinkableSelfNode: true,
                             // fromLinkableDuplicates: true, toLinkableDuplicates: true
                         },
-                        new go.Binding("fill", "color")
+                        // new go.Binding("fill", "color")
                     )),
 
-                $(go.Panel, "Vertical",
-                    $(go.Panel, "Horizontal", { margin: 3 },
+                $(go.Panel, "Horizontal",
+
+                    $(go.Panel, "Vertical",
+
                         $(go.Picture,
-                            { margin: 10, width: 70, height: 30, background: "white" },
-                            new go.Binding("source")),
+
+                            {
+                                margin: new go.Margin(0, 0, 0, 10),
+                                   
+                                width: 50,
+                                height: 50,
+                                background: "transparent"
+                            },
+
+                            new go.Binding("source")
+
+                        ),
+
+                    ),
+
+                    $(go.Panel, "Horizontal", {
+                        margin: new go.Margin(0, 0, 0, 40)
+
+                    }),
+
+
+
+
+
+                    $(go.Panel, "Horizontal", { padding: new go.Margin(0, 130, 0, 0) },
+
+                        // $(go.Picture,
+                        //     { margin: 10, width: 70, height: 30, background: "white" },
+                        //     new go.Binding("source")),
                         $(go.TextBlock,
                             {
                                 stretch: go.GraphObject.Horizontal,
-                                font: "bold 12pt Verdana, sans-serif"
+                                font: "bold 12pt Verdana,Slab Serifs"
                             },
                             new go.Binding("text", "question")
                         ),
@@ -690,17 +753,81 @@ export class IvrComponent implements OnInit {
         // initialize contents of Palette
         this.palette.model.nodeDataArray =
             [
-                { key: 1, question: "All Customers", color: "lightblue" },
-                { key: 2, question: "Demographics", color: "lightgreen" },
-                { key: 3, question: "Email", color: "orange" },
-                { key: 4, question: "Purchase", color: "pink" },
-                { key: 5, question: "Customer Engagement", color: "yellow" },
-                { key: 6, question: "Model Qualifiers", color: "yellow" },
-                { key: 7, question: "Geography", color: "yellow" },
-                { key: 8, question: "Customer Persona", color: "yellow" },
-                { key: 9, question: "Pro Attributes", color: "yellow" },
-                { key: 10, question: "Graph Create", color: "yellow" },
-                { key: 11, question: "Terminal", color: "yellow" },
+                // { key: 1, question: "All Customers", color: "lightblue", actions: [] },
+                // { key: 2, question: "Demographics", color: "lightgreen", actions: [] },
+                // { key: 3, question: "Email", color: "orange", actions: [] },
+                // { key: 4, question: "Purchase", color: "pink", actions: [] },
+                // { key: 5, question: "Customer Engagement", color: "yellow", actions: [] },
+                // { key: 6, question: "Model Qualifiers", color: "yellow", actions: [] },
+                // { key: 7, question: "Geography", color: "yellow", actions: [] },
+                // { key: 8, question: "Customer Persona", color: "yellow", actions: [] },
+                // { key: 9, question: "Pro Attributes", color: "yellow", actions: [] },
+                // { key: 10, question: "Graph Create", color: "yellow", actions: [] },
+                // { key: 11, question: "Terminal", color: "yellow", actions: [] },
+                {
+                    key: 1,
+                    question: "All Customers",
+                    color: "lightblue", source: 'https://cdn1.iconfinder.com/data/icons/business-minimal/512/social__person_Group_Business_community_teamwork_relationship-512.png'
+                },
+
+                {
+                    key: 2,
+                    question: "Demographics",
+                    color: "#F1C40F", source: 'https://i.ibb.co/ScF5fFQ/156283676431409527.png'
+                },
+
+                {
+                    key: 3,
+                    question: "Email",
+                    color: "#32B8B3",
+                    source: 'https://www.stickpng.com/assets/thumbs/584856b4e0bb315b0f7675ac.png'
+                },
+
+                {
+                    key: 4,
+                    question: "Purchase",
+                    color: "#8046b2",
+                    source: 'https://pngriver.com/wp-content/uploads/2018/04/Download-Shopping-Cart-Png-Image-75838-For-Designing-Projects.png'
+                },
+
+                {
+                    key: 5,
+                    question: "Customer Engagement",
+                    color: "#4687b2", source: 'https://cdn2.iconfinder.com/data/icons/lightly-icons/30/user-480.png'
+                },
+
+                {
+                    key: 6,
+                    question: "Model Qualifiers",
+                    color: "#B24646", source: 'https://i.ibb.co/16C7fDZ/imageedit-3-8418722331.png'
+
+                },
+
+                {
+                    key: 7,
+                    question: "Geography",
+                    color: "#16A085", source: 'https://ya-webdesign.com/images/black-and-white-globe-png.png'
+                },
+
+                {
+                    key: 8,
+                    question: "Customer Persona",
+                    color: "#F5B041",
+                    source: 'https://cdn3.iconfinder.com/data/icons/online-user/120/user-edit-1-512.png'
+                },
+
+                {
+                    key: 9,
+                    question: "Pro Attributes",
+                    color: "#82E0AA ", source: 'http://cdn.onlinewebfonts.com/svg/img_164241.png'
+                },
+
+                {
+                    key: 10,
+                    question: "Terminal",
+                    color: "yellow"
+                },
+
             ];
     }
 
@@ -813,6 +940,19 @@ export class IvrComponent implements OnInit {
         });
 
     }
+
+    findCorrectParent(result) {
+        var parentLink = this.linkDataArrayInsideIVR.find((el) => {
+            return el.to === result.key;
+        })
+        console.log("parentLink", parentLink);
+        // use parent.from to get the data to filter upon
+        var nodeToActUpon = this.nodeDataArrayInsideIVR.find(el => {
+            return el.key === parentLink.from;
+        })
+        console.log("nodeToActUpon", nodeToActUpon);
+        return nodeToActUpon;
+    }
     openDialogDemographics(data: any): void {
         console.log("inside open dialog demographics", data);
         const dialogRef = this.dialog.open(ModalComponent1, {
@@ -834,26 +974,18 @@ export class IvrComponent implements OnInit {
             }
             if (result.age) {
 
-                result.actions.push({ text: result.age, fill: "blue" })
+                // result.actions.push({ text: result.age, fill: "blue" })
             }
             if (result.income) {
 
-                result.actions.push({ text: result.income, fill: "dodgerblue" })
+                // result.actions.push({ text: result.income, fill: "dodgerblue" })
             }
             // console.log("final result", result);
             // console.log("all of the customers", this.allCustomersArray);
-
-            var parentLink = this.linkDataArrayInsideIVR.find((el) => {
-                return el.to === data.key;
-            })
-            console.log("parent", parent);
-            // use parent.from to get the data to filter upon
-            var nodeToActUpon = this.nodeDataArrayInsideIVR.find(el => {
-                return el.from === parentLink.from;
-            })
-            console.log("dataToActUpon", nodeToActUpon);
+            // console.log("data", data);
+            var nodeToActUpon = this.findCorrectParent(result)
             let ageIncomeFilteredCustomers = nodeToActUpon.filtered.filter((customer) => {
-                return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
+                return ((customer.Age < result.age) || (Number(customer.Income) < Number(result.income)))
             });
             console.log('filtered customers based on age and income', ageIncomeFilteredCustomers);
             data.filtered = ageIncomeFilteredCustomers
