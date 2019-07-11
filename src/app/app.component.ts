@@ -246,7 +246,7 @@ export class AppComponent {
           let op=this.message['operator']
           let flagger=false
           this.linkDataArray.forEach(ele=>{
-            if((ele.from==k)&&(ele.to==l.key)){
+            if((ele.from==l.key)&&(ele.to==k)){
                 flagger=true;
             }
           })
