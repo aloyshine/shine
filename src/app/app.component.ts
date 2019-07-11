@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import * as go from 'gojs';
 import { MatDialog } from '@angular/material';
 import { TerminalcomponentComponent } from './terminalcomponent/terminalcomponent.component';
+import { TerminalService } from './terminal.service';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 interface INodeData {
   key?: number, question?: "All Customers", isGroup?: boolean, group?: number,
@@ -14,7 +16,8 @@ interface INodeData {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private terminaldialog: MatDialog) {
+  message: any;
+  constructor(private terminaldialog: MatDialog,private terminal:TerminalService) {
 
   }
   // @Input() openterminaldialog : boolean;
@@ -218,6 +221,34 @@ export class AppComponent {
         data: { nodeDataArray: this.nodeDataArray, linkDataArray: this.linkDataArray, key: e.key }
       })
       dialogRef.afterClosed().subscribe(result => {
+        
+        this.terminal.currentMessage.subscribe(message => this.message = message)
+        console.log(this.message)
+        
+        if((this.message['leaf']!=null)&&(this.message['operator']!=null))
+        {
+          let l=this.message['leaf']
+          let k=this.message['fromnode']
+          
+          let op=this.message['operator']
+          let flagger=false
+          this.linkDataArray.forEach(ele=>{
+            if((ele.from==k)&&(ele.to==l.key)){
+                flagger=true;
+            }
+          })
+          if(flagger==false){
+            this.linkDataArray.push({
+              from: l.key,
+              to:k,
+              answer:1
+            })
+            console.log("linkdata",this.linkDataArray)
+          this.modelIVR = new go.GraphLinksModel(this.nodeDataArray, this.linkDataArray);
+          }
+         
+          
+        }
         console.log("result", result);
         // result.actions.push({ text: result.purchase, fill: "red" })
         // console.log("final result", result);

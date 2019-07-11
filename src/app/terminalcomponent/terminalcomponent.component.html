@@ -1,23 +1,23 @@
 <form [formGroup]="activityForm" (ngSubmit)="onSubmit(activityForm)">
     <mat-label>Operator</mat-label>
     <mat-form-field>
-        <mat-select formControlName="Operator">
-            <mat-option *ngFor="let c of operators" [value]="c">
+        <mat-select formControlName="Operator"  >
+            <mat-option *ngFor="let c of operators" [value]="c" (click)="changeOperator(c)">
                 {{c}}
             </mat-option>
         </mat-select>
     </mat-form-field>
     <mat-label>Terminal Nodes</mat-label>
     <mat-form-field>
-        <mat-select formControlName="leafNodes">
-            <mat-option *ngFor="let c of finalnodes" [value]="c">
+        <mat-select formControlName="leafNodes" >
+            <mat-option *ngFor="let c of finalnodes" [value]="c" (click)="changeLeaf(c)">
                 {{c.question}}
             </mat-option>
         </mat-select>
     </mat-form-field>
     <div mat-dialog-actions>
-        <button type="submit">Send</button>
-        <button mat-button [mat-dialog-close]="data" cdkFocusInitial>OK</button>
+        <!-- <button type="submit">Send</button> -->
+        <button mat-button [mat-dialog-close]="data" cdkFocusInitial (click)="createterminallink()">OK</button>
         <button mat-button [mat-dialog-close]="null">Cancel</button>
     </div>
 </form>

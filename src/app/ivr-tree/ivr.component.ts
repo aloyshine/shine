@@ -648,7 +648,7 @@ export class IvrComponent implements OnInit {
 
         this.diagram.layout =
             $(go.TreeLayout,
-                { angle: 90, layerSpacing: 35, arrangement: go.TreeLayout.ArrangementFixedRoots });
+                { angle: 90, layerSpacing: 35 });
 
         this.diagram.linkTemplate =
             $(go.Link,
