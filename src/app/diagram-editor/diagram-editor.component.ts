@@ -133,6 +133,9 @@ export class DiagramEditorComponent implements OnInit {
           this.openDialog(node.data);
         }
       },
+      // It is common to want to update some data properties based on changes to the diagram. 
+      // For example, as the user changes the Part.location by dragging a Node, you can 
+      // automatically keep the node's model data in sync using a TwoWay binding.
       new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
       $(go.Panel, "Auto",
         $(go.Shape, { fill: "white" }, new go.Binding("figure")),

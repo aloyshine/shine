@@ -61,7 +61,7 @@ go.Shape.defineFigureGenerator("RoundedLeftRectangle", function (shape, w, h) {
 })
 export class IvrComponent implements OnInit {
     private diagram: go.Diagram = new go.Diagram();
-    // private palette: go.Palette = new go.Palette();
+    private palette: go.Palette = new go.Palette();
 
     @ViewChild('diagramDiv')
     private diagramRef: ElementRef;
@@ -69,8 +69,8 @@ export class IvrComponent implements OnInit {
     @ViewChild('g')
     private inputRef: ElementRef;
 
-    // @ViewChild('paletteDiv')
-    // private paletteRef: ElementRef;
+    @ViewChild('paletteDiv')
+    private paletteRef: ElementRef;
 
     @Input()
     get model(): go.Model { return this.diagram.model; }
@@ -103,7 +103,7 @@ export class IvrComponent implements OnInit {
         this.diagram.allowCopy = false;
         // this.diagram.draggingTool.dragsTree = true;
         this.diagram.commandHandler.deletesTree = true;
-        // this.diagram.allowDrop = true;
+        this.diagram.allowDrop = true;
 
         this.diagram.undoManager.isEnabled = true;
         // this.diagram.hoverDelay = 100;
@@ -423,15 +423,27 @@ export class IvrComponent implements OnInit {
             // the main "BODY" consists of a RoundedRectangle surrounding nested Panels
             $(go.Panel, "Auto",
                 { name: "BODY" },
-                $(go.Panel, "Horizontal", 
-                $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35,width:70 },
-                    { fill: bluegrad, stroke: null },
-                    new go.Binding("fill", "color")
-                ), $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35,width:210 },
-                    { fill: bluegrad, stroke: null },
-                    new go.Binding("fill", "color")
-                )),
-                
+                $(go.Panel, "Horizontal",
+                    $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35, width: 70 },
+                        {
+                            fill: bluegrad, stroke: null, portId: "", cursor: "pointer",
+                            // allow many kinds of links
+                            fromLinkable: true, toLinkable: true,
+                            // fromLinkableSelfNode: true, toLinkableSelfNode: true,
+                            // fromLinkableDuplicates: false, toLinkableDuplicates:false
+                        },
+                        new go.Binding("fill", "color")
+                    ), $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35, width: 210 },
+                        {
+                            fill: bluegrad, stroke: null, portId: "", cursor: "pointer",
+                            // allow many kinds of links
+                            fromLinkable: true, toLinkable: true,
+                            // fromLinkableSelfNode: true, toLinkableSelfNode: true,
+                            // fromLinkableDuplicates: true, toLinkableDuplicates: true
+                        },
+                        new go.Binding("fill", "color")
+                    )),
+
                 $(go.Panel, "Vertical",
                     $(go.Panel, "Horizontal", { margin: 3 },
                         $(go.Picture,
@@ -617,24 +629,33 @@ export class IvrComponent implements OnInit {
         );
 
 
+        // this.diagram.linkTemplate =
+        //     $(go.Link, go.Link.Orthogonal,
+        //         { deletable: false, corner: 10 },
+        //         $(go.Shape,
+        //             { strokeWidth: 2 }
+        //         ),
+        //         $(go.TextBlock, go.Link.OrientUpright,
+        //             {
+        //                 background: "white",
+        //                 visible: false,  // unless the binding sets it to true for a non-empty string
+        //                 segmentIndex: -2,
+        //                 segmentOrientation: go.Link.None
+        //             },
+        //             new go.Binding("text", "answer"),
+        //             // hide empty string;
+        //             // if the "answer" property is undefined, visible is false due to above default setting
+        //             new go.Binding("visible", "answer", function (a) { return (a ? true : false); })
+        //         )
+        //     );
+
+
         this.diagram.linkTemplate =
-            $(go.Link, go.Link.Orthogonal,
-                { deletable: false, corner: 10 },
-                $(go.Shape,
-                    { strokeWidth: 2 }
-                ),
-                $(go.TextBlock, go.Link.OrientUpright,
-                    {
-                        background: "white",
-                        visible: false,  // unless the binding sets it to true for a non-empty string
-                        segmentIndex: -2,
-                        segmentOrientation: go.Link.None
-                    },
-                    new go.Binding("text", "answer"),
-                    // hide empty string;
-                    // if the "answer" property is undefined, visible is false due to above default setting
-                    new go.Binding("visible", "answer", function (a) { return (a ? true : false); })
-                )
+            $(go.Link,
+                // allow relinking
+                { relinkableFrom: true, relinkableTo: true },
+                $(go.Shape, { strokeWidth: 2 }),
+                $(go.Shape, { toArrow: "OpenTriangle" })
             );
 
 
@@ -642,28 +663,34 @@ export class IvrComponent implements OnInit {
 
 
 
-        this.diagram.layout =
-            $(go.TreeLayout,
-                { angle: 90, layerSpacing: 35 });
+        // this.diagram.layout =
+        //     $(go.TreeLayout,
+        //         { angle: 90, layerSpacing: 35 });
 
-        this.diagram.linkTemplate =
-            $(go.Link,
-                { routing: go.Link.Orthogonal, corner: 5 },
-                $(go.Shape, { strokeWidth: 3, stroke: "#555" })); // the link shape
+        // this.diagram.linkTemplate =
+        //     $(go.Link,
+        //         { routing: go.Link.Orthogonal, corner: 5 },
+        //         $(go.Shape, { strokeWidth: 3, stroke: "#555" })); // the link shape
 
 
-        // this.palette = new go.Palette();
-        // this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
+        this.palette = new go.Palette();
+        this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
 
         // initialize contents of Palette
-        // this.palette.model.nodeDataArray =
-        //   [
-        //     { key: 1, text: "Alpha", color: "lightblue" },
-        //     { key: 2, text: "Beta", color: "orange" },
-        //     { key: 3, text: "Gamma", color: "lightgreen" },
-        //     { key: 4, text: "Delta", color: "pink" },
-        //     { key: 5, text: "Epsilon", color: "yellow" }
-        //   ];
+        this.palette.model.nodeDataArray =
+            [
+                { key: 1, question: "All Customers", color: "lightblue" },
+                { key: 2, question: "Email", color: "orange" },
+                { key: 3, question: "Demographics", color: "lightgreen" },
+                { key: 4, question: "Purchase", color: "pink" },
+                { key: 5, question: "Customer Engagement", color: "yellow" },
+                { key: 5, question: "Model Qualifiers", color: "yellow" },
+                { key: 5, question: "Geography", color: "yellow" },
+                { key: 5, question: "Customer Persona", color: "yellow" },
+                { key: 5, question: "Pro Attributes", color: "yellow" },
+                { key: 5, question: "Graph Create", color: "yellow" },
+                { key: 5, question: "Terminal", color: "yellow" },
+            ];
     }
 
     // this function changes the category of the node data to cause the Node to be replaced
@@ -685,7 +712,7 @@ export class IvrComponent implements OnInit {
 
     ngOnInit() {
         this.diagram.div = this.diagramRef.nativeElement;
-        // this.palette.div = this.paletteRef.nativeElement;
+        this.palette.div = this.paletteRef.nativeElement;
 
     }
 
