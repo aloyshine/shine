@@ -8,8 +8,51 @@ import { TerminalcomponentComponent } from '../terminalcomponent/terminalcompone
 import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.component';
 import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
 import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
-import {MatIconModule} from '@angular/material/icon';
+go.Shape.defineFigureGenerator("RoundedRightRectangle", function (shape, w, h) {
+    // this figure takes one parameter, the size of the corner
+    var p1 = h / 2;  // default corner size
+    if (shape !== null) {
+        var param1 = shape.parameter1;
+        if (!isNaN(param1) && param1 >= 0) p1 = param1;  // can't be negative or NaN
+    }
+    p1 = Math.min(p1, w / 2);
+    p1 = Math.min(p1, h / 2);  // limit by whole height or by half height?
+    var geo = new go.Geometry();
+    // a single figure consisting of straight lines and quarter-circle arcs
+    geo.add(new go.PathFigure(0, 0)
+        .add(new go.PathSegment(go.PathSegment.Line, w - p1, 0))
+        .add(new go.PathSegment(go.PathSegment.Arc, 270, 90, w - p1, p1, p1, p1))
+        .add(new go.PathSegment(go.PathSegment.Line, w, h - p1))
+        .add(new go.PathSegment(go.PathSegment.Arc, 0, 90, w - p1, h - p1, p1, p1))
+        .add(new go.PathSegment(go.PathSegment.Line, p1, h))
+        .add(new go.PathSegment(go.PathSegment.Line, 0, h).close()));
+    // don't intersect with two top corners when used in an "Auto" Panel
+    geo.spot1 = new go.Spot(0, 0, 0.3 * p1, 0.3 * p1);
+    geo.spot2 = new go.Spot(1, 1, -0.3 * p1, 0);
+    return geo;
+});
 
+go.Shape.defineFigureGenerator("RoundedLeftRectangle", function (shape, w, h) {
+    // this figure takes one parameter, the size of the corner
+    var p1 = h / 2;  // default corner size
+    if (shape !== null) {
+        var param1 = shape.parameter1;
+        if (!isNaN(param1) && param1 >= 0) p1 = param1;  // can't be negative or NaN
+    }
+    p1 = Math.min(p1, w / 2);
+    p1 = Math.min(p1, h / 2);  // limit by whole height or by half height?
+    var geo = new go.Geometry();
+    // a single figure consisting of straight lines and quarter-circle arcs
+    geo.add(new go.PathFigure(0, p1)
+        .add(new go.PathSegment(go.PathSegment.Arc, 180, 90, p1, p1, p1, p1))
+        .add(new go.PathSegment(go.PathSegment.Line, w, 0))
+        .add(new go.PathSegment(go.PathSegment.Line, w, h))
+        .add(new go.PathSegment(go.PathSegment.Arc, 90, 90, p1, h - p1, p1, p1).close()));
+    // don't intersect with two top corners when used in an "Auto" Panel
+    geo.spot1 = new go.Spot(0, 0, 0.3 * p1, 0.3 * p1);
+    geo.spot2 = new go.Spot(1, 1, -0.3 * p1, 0);
+    return geo;
+});
 
 @Component({
     selector: 'app-ivr',
@@ -18,7 +61,7 @@ import {MatIconModule} from '@angular/material/icon';
 })
 export class IvrComponent implements OnInit {
     private diagram: go.Diagram = new go.Diagram();
-    // private palette: go.Palette = new go.Palette();
+    private palette: go.Palette = new go.Palette();
 
     @ViewChild('diagramDiv')
     private diagramRef: ElementRef;
@@ -26,8 +69,8 @@ export class IvrComponent implements OnInit {
     @ViewChild('g')
     private inputRef: ElementRef;
 
-    // @ViewChild('paletteDiv')
-    // private paletteRef: ElementRef;
+    @ViewChild('paletteDiv')
+    private paletteRef: ElementRef;
 
     @Input()
     get model(): go.Model { return this.diagram.model; }
@@ -48,6 +91,8 @@ export class IvrComponent implements OnInit {
     @Output()
     modelChanged = new EventEmitter<go.ChangedEvent>();
     allCustomersArray = [];
+    nodeDataArrayInsideIVR = [];
+    linkDataArrayInsideIVR = [];
 
 
     constructor(public dialog: MatDialog) {
@@ -60,17 +105,26 @@ export class IvrComponent implements OnInit {
         this.diagram.allowCopy = false;
         // this.diagram.draggingTool.dragsTree = true;
         this.diagram.commandHandler.deletesTree = true;
-        // this.diagram.allowDrop = true;
+        this.diagram.allowDrop = true;
 
         this.diagram.undoManager.isEnabled = true;
         // this.diagram.hoverDelay = 100;
         this.diagram.toolManager.draggingTool = new GuidedDraggingTool();
         this.diagram.addDiagramListener("ChangedSelection",
             e => {
-                // console.log('changed selection', e);
+                // console.log('changed selection event', e);
                 const node = e.diagram.selection.first();
                 console.log('changed selection node', node.data);
-                // this.nodeSelected.emit(node.name);
+                if (node.data.question) {
+                    this.nodeDataArrayInsideIVR.push(node.data);
+                } else {
+                    this.linkDataArrayInsideIVR.push(node.data);
+                }
+                console.log("nodeDataArrayInsideIVR", this.nodeDataArrayInsideIVR)
+                console.log("linkDataArrayInsideIVR", this.linkDataArrayInsideIVR);
+                // this.allConnectionsArray.push(node.data);
+                // console.log("all connections array", this.allConnectionsArray);
+                // this.nodeSelected.emit(node.data);
             });
         this.diagram.addModelChangedListener(e => e.isTransactionFinished && this.modelChanged.emit(e));
 
@@ -376,22 +430,63 @@ export class IvrComponent implements OnInit {
                     // this.openDialog(node.data);
                 }
             },
+
             // the main "BODY" consists of a RoundedRectangle surrounding nested Panels
             $(go.Panel, "Auto",
                 { name: "BODY" },
-                $(go.Shape, "RoundedRectangle",
-                    { fill: bluegrad, stroke: null }
+                $(go.Panel, "Horizontal",
+                   
+                    $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35, width: 70 },
+                        {
+                            fill: bluegrad, stroke: null
+                            
+                            //portId: "", cursor: "pointer",
+                            // allow many kinds of links
+                            //fromLinkable: true, toLinkable: true,
+                            // fromLinkableSelfNode: true, toLinkableSelfNode: true,
+                            // fromLinkableDuplicates: false, toLinkableDuplicates:false
+                        },
+                        new go.Binding("fill", "color"),
+                        //$(go.Picture()),
+                    ),
+                    
+
+                     $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35, width: 210 },
+                        {
+                            fill: "#EEE", stroke: null, portId: "", cursor: "pointer",
+                            // allow many kinds of links
+                             fromLinkable: true, toLinkable: true,
+                            // fromLinkableSelfNode: true, toLinkableSelfNode: true,
+                            // fromLinkableDuplicates: true, toLinkableDuplicates: true
+                        },
+                       // new go.Binding("fill", "color")
+                    )
                 ),
-                $(go.Panel, "Vertical",
+                
+                $(go.Panel, "Horizontal",
+                    $(go.Panel,"Vertical",
+                        $(go.Picture,
+                        { margin: new go.Margin(0,0,0,10), width: 50, height: 50, background: "transparent" },
+                        new go.Binding("source")
+                        ),
+                    ),
+                    $(go.Panel,"Horizontal",{margin:new go.Margin(0,0,0,40)}),
+                    $(go.Panel, "Horizontal", {padding: new go.Margin(0,130,0,0)},
+                      
+                         
+                        
+                        $(go.TextBlock,
+                            {
+                                stretch: go.GraphObject.Horizontal,
+                                font: "bold 12pt Verdana, Slab Serifs"
+                            },
+                            new go.Binding("text", "question")
+                        ),
+
+                    ),
                     { margin: 3 },
                     // the title
-                    $(go.TextBlock,
-                        {
-                            stretch: go.GraphObject.Horizontal,
-                            font: "bold 12pt Verdana, sans-serif"
-                        },
-                        new go.Binding("text", "question")
-                    ),
+
                     // the optional list of actions
                     $(go.Panel, "Vertical",
                         { stretch: go.GraphObject.Horizontal, visible: false },  // not visible unless there is more than one action
@@ -560,24 +655,33 @@ export class IvrComponent implements OnInit {
         );
 
 
+        // this.diagram.linkTemplate =
+        //     $(go.Link, go.Link.Orthogonal,
+        //         { deletable: false, corner: 10 },
+        //         $(go.Shape,
+        //             { strokeWidth: 2 }
+        //         ),
+        //         $(go.TextBlock, go.Link.OrientUpright,
+        //             {
+        //                 background: "white",
+        //                 visible: false,  // unless the binding sets it to true for a non-empty string
+        //                 segmentIndex: -2,
+        //                 segmentOrientation: go.Link.None
+        //             },
+        //             new go.Binding("text", "answer"),
+        //             // hide empty string;
+        //             // if the "answer" property is undefined, visible is false due to above default setting
+        //             new go.Binding("visible", "answer", function (a) { return (a ? true : false); })
+        //         )
+        //     );
+
+
         this.diagram.linkTemplate =
-            $(go.Link, go.Link.Orthogonal,
-                { deletable: false, corner: 10 },
-                $(go.Shape,
-                    { strokeWidth: 2 }
-                ),
-                $(go.TextBlock, go.Link.OrientUpright,
-                    {
-                        background: "white",
-                        visible: false,  // unless the binding sets it to true for a non-empty string
-                        segmentIndex: -2,
-                        segmentOrientation: go.Link.None
-                    },
-                    new go.Binding("text", "answer"),
-                    // hide empty string;
-                    // if the "answer" property is undefined, visible is false due to above default setting
-                    new go.Binding("visible", "answer", function (a) { return (a ? true : false); })
-                )
+            $(go.Link,
+                // allow relinking
+                { relinkableFrom: true, relinkableTo: true },
+                $(go.Shape, { strokeWidth: 2 }),
+                $(go.Shape, { toArrow: "OpenTriangle" })
             );
 
 
@@ -585,28 +689,33 @@ export class IvrComponent implements OnInit {
 
 
 
-        this.diagram.layout =
-            $(go.TreeLayout,
-                { angle: 90, layerSpacing: 35 });
+        // this.diagram.layout =
+        //     $(go.TreeLayout,
+        //         { angle: 90, layerSpacing: 35 });
 
-        this.diagram.linkTemplate =
-            $(go.Link,
-                { routing: go.Link.Orthogonal, corner: 5 },
-                $(go.Shape, { strokeWidth: 3, stroke: "#555" })); // the link shape
+        // this.diagram.linkTemplate =
+        //     $(go.Link,
+        //         { routing: go.Link.Orthogonal, corner: 5 },
+        //         $(go.Shape, { strokeWidth: 3, stroke: "#555" })); // the link shape
 
 
-        // this.palette = new go.Palette();
-        // this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
+        this.palette = new go.Palette();
+        this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
 
         // initialize contents of Palette
-        // this.palette.model.nodeDataArray =
-        //   [
-        //     { key: 1, text: "Alpha", color: "lightblue" },
-        //     { key: 2, text: "Beta", color: "orange" },
-        //     { key: 3, text: "Gamma", color: "lightgreen" },
-        //     { key: 4, text: "Delta", color: "pink" },
-        //     { key: 5, text: "Epsilon", color: "yellow" }
-        //   ];
+        this.palette.model.nodeDataArray =
+            [
+                { key: 1, question: "All Customers", color: "lightblue" ,source:'https://cdn1.iconfinder.com/data/icons/business-minimal/512/social__person_Group_Business_community_teamwork_relationship-512.png' },
+                { key: 2, question: "Demographics", color: "#F1C40F" ,source:'https://i.ibb.co/ScF5fFQ/156283676431409527.png'},
+                { key: 3, question: "Email", color: "#32B8B3" , source:'https://www.stickpng.com/assets/thumbs/584856b4e0bb315b0f7675ac.png'},
+                { key: 4, question: "Purchase", color: "#8046b2", source:'https://pngriver.com/wp-content/uploads/2018/04/Download-Shopping-Cart-Png-Image-75838-For-Designing-Projects.png' },
+                { key: 5, question: "Customer Engagement", color: "#4687b2" ,source:'https://cdn2.iconfinder.com/data/icons/lightly-icons/30/user-480.png'},
+                { key: 6, question: "Model Qualifiers", color: "#B24646" ,source: 'https://i.ibb.co/16C7fDZ/imageedit-3-8418722331.png'},
+                { key: 7, question: "Geography", color: "#16A085" ,source:'https://ya-webdesign.com/images/black-and-white-globe-png.png'},
+                { key: 8, question: "Customer Persona", color: "#F5B041", source:'https://cdn3.iconfinder.com/data/icons/online-user/120/user-edit-1-512.png' },
+                { key: 9, question: "Pro Attributes", color: "#82E0AA  " ,source:'http://cdn.onlinewebfonts.com/svg/img_164241.png' },
+                { key: 10, question: "Terminal", color: "yellow" },
+            ];
     }
 
     // this function changes the category of the node data to cause the Node to be replaced
@@ -628,7 +737,7 @@ export class IvrComponent implements OnInit {
 
     ngOnInit() {
         this.diagram.div = this.diagramRef.nativeElement;
-        // this.palette.div = this.paletteRef.nativeElement;
+        this.palette.div = this.paletteRef.nativeElement;
 
     }
 
@@ -645,10 +754,10 @@ export class IvrComponent implements OnInit {
             result.actions.push({ text: result.country, fill: "green" })
             console.log("final result emitted", result);
             console.log("all of the customers", this.allCustomersArray);
-           let ageFilteredCustomers =  this.allCustomersArray.filter((customer) => {
+            let ageFilteredCustomers = this.allCustomersArray.filter((customer) => {
                 return customer.Age < 37
             });
-            console.log('filterd customers based on age',ageFilteredCustomers);
+            console.log('filtered customers based on age', ageFilteredCustomers);
             this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
@@ -719,7 +828,7 @@ export class IvrComponent implements OnInit {
 
     }
     openDialogDemographics(data: any): void {
-        console.log("inside open dialog", data);
+        console.log("inside open dialog demographics", data);
         const dialogRef = this.dialog.open(ModalComponent1, {
             width: '250px',
             // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
@@ -745,13 +854,25 @@ export class IvrComponent implements OnInit {
 
                 result.actions.push({ text: result.income, fill: "dodgerblue" })
             }
-            console.log("final result", result);
-            console.log("all of the customers", this.allCustomersArray);
-            let ageFilteredCustomers =  this.allCustomersArray.filter((customer) => {
-                 return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
-             });
-             console.log('filterd customers based on age',ageFilteredCustomers);
-            this.nodeMetrics.emit(result);
+            // console.log("final result", result);
+            // console.log("all of the customers", this.allCustomersArray);
+
+            var parentLink = this.linkDataArrayInsideIVR.find((el) => {
+                return el.to === data.key;
+            })
+            console.log("parent", parent);
+            // use parent.from to get the data to filter upon
+            var nodeToActUpon = this.nodeDataArrayInsideIVR.find(el => {
+                return el.from === parentLink.from;
+            })
+            console.log("dataToActUpon", nodeToActUpon);
+            let ageIncomeFilteredCustomers = nodeToActUpon.filtered.filter((customer) => {
+                return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
+            });
+            console.log('filtered customers based on age and income', ageIncomeFilteredCustomers);
+            data.filtered = ageIncomeFilteredCustomers
+            // result.filtered = ageIncomeFilteredCustomers;
+            // this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
             //     this.diagram.model.commit(function (m) {
@@ -771,7 +892,7 @@ export class IvrComponent implements OnInit {
         // console.log("data in terminal", data);
         this.terminalevent.emit(data)
     }
-     csvJSON(csv) {
+    csvJSON(csv) {
         var lines = csv.split("\n");
 
 
@@ -787,13 +908,13 @@ export class IvrComponent implements OnInit {
             }
 
             this.allCustomersArray.push(obj);
-            console.log("json result",this.allCustomersArray);
+            console.log("json result", this.allCustomersArray);
         }
 
         //return result; //JavaScript object
         return JSON.stringify(this.allCustomersArray); //JSON
     }
-    convertFile(e){
+    convertFile(e) {
         const input = (<HTMLInputElement>document.getElementById('fileInput'))
 
         const reader = new FileReader();
