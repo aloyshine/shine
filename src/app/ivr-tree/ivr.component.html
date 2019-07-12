@@ -1,10 +1,35 @@
-<h1>Murphy Drive Rewards</h1>
-<div class="diagramsPanel">
-  <div #paletteDiv class="paletteDiv"></div>
-  <div #diagramDiv class="diagramDiv"></div>
-  <!--<div>
-      <button (click)="openDialog()">(should be hidden)</button>
-    </div>-->
-</div>
+<div style="text-align: center;">
 
-<input type='file' (change)='convertFile(event)' id='fileInput' #g>
+  <h1 style="margin-bottom: 20px;">Murphy Drive Rewards</h1>
+</div> 
+<!-- <mat-tab-group>
+    <mat-tab label="First"> Content 1 </mat-tab>
+    <mat-tab label="Second"> Content 2 </mat-tab>
+    <mat-tab label="Third"> Content 3 </mat-tab>
+  </mat-tab-group> -->
+<div
+ class="fileinputs" style="text-align: end;">
+  <input  type='file' (change)='convertFile(event)' id='fileInput' #g  class="file"  style="  border-radius: 25px;
+  border: 2px solid#eba33f;
+  padding: 20px; 
+  width: 200px;
+  height: 15px;   "
+ 
+  >
+  <!-- <div class="fakefile">
+      <input />
+      <img src="data:image/png;base64,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" />
+    </div> -->
+</div>
+  
+<div class="diagramsPanel" style="margin-top:20px;">
+  
+  <div #paletteDiv class="paletteDiv"></div>
+    <div #diagramDiv class="diagramDiv">
+
+      </div>
+      
+      <!--<div>
+        <button (click)="openDialog()">(should be hidden)</button>
+      </div>-->
+    </div>

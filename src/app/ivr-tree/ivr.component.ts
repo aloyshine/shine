@@ -54,6 +54,8 @@ go.Shape.defineFigureGenerator("RoundedLeftRectangle", function (shape, w, h) {
     return geo;
 });
 
+
+
 @Component({
     selector: 'app-ivr',
     templateUrl: './ivr.component.html',
@@ -115,16 +117,46 @@ export class IvrComponent implements OnInit {
                 // console.log('changed selection event', e);
                 const node = e.diagram.selection.first();
                 console.log('changed selection node', node.data);
+                if (node.data.question === "All Customers") {
+                    node.data.filtered = this.allCustomersArray;
+                }
+
+                // this.nodeDataArrayInsideIVR.push(node.data);
+                // this.linkDataArrayInsideIVR.push(node.data);
+
+                // check if an element exists in array using a comparer function
+                // comparer : function(currentElement)
+                function inArray(arr1, comparer) {
+                    for (var i = 0; i < arr1.length; i++) {
+                        if (comparer(arr1[i])) return true;
+                    }
+                    return false;
+                };
+
+                // adds an element to the array if it does not already exist using a comparer 
+                // function
+                function pushIfNotExist(arr, element, comparer) {
+                    if (!inArray(arr, comparer)) {
+                        arr.push(element);
+                    }
+                };
                 if (node.data.question) {
-                    this.nodeDataArrayInsideIVR.push(node.data);
+                    // debugger;
+                    pushIfNotExist(this.nodeDataArrayInsideIVR, node.data, function (e) {
+                        return e.key === node.data.key;
+                    });
+
                 } else {
-                    this.linkDataArrayInsideIVR.push(node.data);
+                    pushIfNotExist(this.linkDataArrayInsideIVR, node.data, function (e) {
+                        return e.from === node.data.from;
+                    });
+
                 }
                 console.log("nodeDataArrayInsideIVR", this.nodeDataArrayInsideIVR)
                 console.log("linkDataArrayInsideIVR", this.linkDataArrayInsideIVR);
                 // this.allConnectionsArray.push(node.data);
                 // console.log("all connections array", this.allConnectionsArray);
-                // this.nodeSelected.emit(node.data);
+                this.nodeSelected.emit(node.data);
             });
         this.diagram.addModelChangedListener(e => e.isTransactionFinished && this.modelChanged.emit(e));
 
@@ -438,8 +470,7 @@ export class IvrComponent implements OnInit {
                    
                     $(go.Shape, { figure: "RoundedLeftRectangle", parameter1: 35, width: 70 },
                         {
-                            fill: bluegrad, stroke: null
-                            
+                            fill: bluegrad, stroke: null,
                             //portId: "", cursor: "pointer",
                             // allow many kinds of links
                             //fromLinkable: true, toLinkable: true,
@@ -453,7 +484,7 @@ export class IvrComponent implements OnInit {
 
                      $(go.Shape, { figure: "RoundedRightRectangle", parameter1: 35, width: 210 },
                         {
-                            fill: "#EEE", stroke: null, portId: "", cursor: "pointer",
+                            fill: "white", stroke: null, portId: "", cursor: "pointer",
                             // allow many kinds of links
                              fromLinkable: true, toLinkable: true,
                             // fromLinkableSelfNode: true, toLinkableSelfNode: true,
@@ -827,6 +858,19 @@ export class IvrComponent implements OnInit {
         });
 
     }
+
+    findCorrectParent(result) {
+        var parentLink = this.linkDataArrayInsideIVR.find((el) => {
+            return el.to === result.key;
+        })
+        console.log("parentLink", parentLink);
+        // use parent.from to get the data to filter upon
+        var nodeToActUpon = this.nodeDataArrayInsideIVR.find(el => {
+            return el.key === parentLink.from;
+        })
+        console.log("nodeToActUpon", nodeToActUpon);
+        return nodeToActUpon;
+    }
     openDialogDemographics(data: any): void {
         console.log("inside open dialog demographics", data);
         const dialogRef = this.dialog.open(ModalComponent1, {
@@ -848,26 +892,18 @@ export class IvrComponent implements OnInit {
             }
             if (result.age) {
 
-                result.actions.push({ text: result.age, fill: "blue" })
+                // result.actions.push({ text: result.age, fill: "blue" })
             }
             if (result.income) {
 
-                result.actions.push({ text: result.income, fill: "dodgerblue" })
+                // result.actions.push({ text: result.income, fill: "dodgerblue" })
             }
             // console.log("final result", result);
             // console.log("all of the customers", this.allCustomersArray);
-
-            var parentLink = this.linkDataArrayInsideIVR.find((el) => {
-                return el.to === data.key;
-            })
-            console.log("parent", parent);
-            // use parent.from to get the data to filter upon
-            var nodeToActUpon = this.nodeDataArrayInsideIVR.find(el => {
-                return el.from === parentLink.from;
-            })
-            console.log("dataToActUpon", nodeToActUpon);
+            // console.log("data", data);
+            var nodeToActUpon = this.findCorrectParent(result)
             let ageIncomeFilteredCustomers = nodeToActUpon.filtered.filter((customer) => {
-                return ((customer.Age < result.age) && (Number(customer.Income) < Number(result.income)))
+                return ((customer.Age < result.age) || (Number(customer.Income) < Number(result.income)))
             });
             console.log('filtered customers based on age and income', ageIncomeFilteredCustomers);
             data.filtered = ageIncomeFilteredCustomers
