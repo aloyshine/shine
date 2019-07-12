@@ -8,6 +8,8 @@ import { TerminalcomponentComponent } from '../terminalcomponent/terminalcompone
 import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.component';
 import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
 import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
+import {MatIconModule} from '@angular/material/icon';
+
 
 @Component({
     selector: 'app-ivr',
