@@ -12,18 +12,92 @@ import { DemographicsService } from '../demographics.service';
   styleUrls: ['./modalDemographics.component.css']
 })
 export class ModalComponent1 implements OnInit {
-  country:string = 'India';
-  age:string = 'black';
-  gender:string = 'male';
-  income:number;
+ // country:string = 'India';
+ // age:string = 'black';
+ // gender:string = 'male';
+ // income:number;
   addOnBlur: boolean = true;
   DemographicsForm: FormGroup;
   separatorKeysCodes = [ENTER, COMMA];
   geography:string;
   filteredAge
   parent:any;
+  showflag:boolean=false;
   SelectedAges=[]
+  columnnames=["memberid",
+    "Gasolene_Fuel_Amount",
+    "Diesel_Fuel_Amount",
+   "MerchAmount",
+    "Gasolene_Fuel_Gallons",
+    "Diesel_Fuel_Gallons",
+   "MerchUnits",
+    "FuelVisit",
+    "MerchVisit",
+    "FuelMerchVisit",
+    "earned_points",
+    "burned_points",
+    "expired_points",
+    "Age",
+    "Income",
+    "Gender",
+    "Preferred Store format",
+    "Region",
+    "State",
+    "Preferred Product Category",
+    "Preferred Product Sub Category",
+    "Merch Types",
+    "Preferred Product Department",
+    ]
+    filterarray=[];
   merchtypes=["Tobacco","Fuel","Non-Tobacco"]
+  Preferred_Store_format=["Small","Kiosk","Large"]
+  Region=["Midwest","Southeast","Southwest"]
+  State=["Arkansas","Oklahama","Ohio","Texas","Alaska"]
+  Preferred_Product_Category=["Other Tobacco",
+  "Cigarettes",
+  "Wine",
+  "Standard Grades",
+  "Liquor",
+  "Packaged Beverages -Non-Alcoho",
+  "Beer",
+  "Smokeless Tobacco",
+  "Clamato",
+  "Specialty Grades"]
+  Preferred_Product_Sub_Category=[
+    "Premium Smokeless",
+"Mid Tier Smokeless",
+"Premium Cigarettes",
+"Value Smokeless",
+"Premium Discount Smokeless",
+"Fourth Tier Cigarettes",
+"Premium Discount Cigarettes",
+"Super Premium Cigarettes",
+"Value Cigarettes",
+"Imports- Do Not Use"
+  ]
+  Preferred_Product_Department=[
+    "Beer",
+"Grocery",
+"Other Tobacco",
+"Packaged Beverages",
+"General Merchandise",
+"Fuel",
+"Wine & Liquor",
+"Lottery/Gaming",
+"Cigarettes",
+"Smokeless Tobacco"
+  ]
+
+gender=["Prefer not to say",
+  "Female",
+  "Prefer not to say",
+  "Male"
+  ]
+
+
+
+  
+
   AllAge=["1","3","5"]
   @ViewChild('fruitInput' ) fruitInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -36,7 +110,8 @@ export class ModalComponent1 implements OnInit {
       console.log(parent);
       this.DemographicsForm = new FormGroup({});
       this.DemographicsForm.addControl('Age', new FormControl(this.SelectedAges ? this.SelectedAges : null))
-      this.DemographicsForm.addControl('MerchType', new FormControl(''))
+      this.DemographicsForm.addControl('colnames', new FormControl(''))
+      this.DemographicsForm.addControl('catnames', new FormControl(''))
       this.filteredAge =  this.DemographicsForm.controls.Age.valueChanges.pipe(
         startWith(null),
         map((age: string | null) => age ? this._filter(age) : this.AllAge.slice()));
@@ -97,6 +172,45 @@ export class ModalComponent1 implements OnInit {
     }
     this._demographicservice.changeMessage(req)
 
+  }
+
+  setfield(col)
+  {
+    if(col=="Gender"){
+      this.showflag=true
+      this.filterarray=this.gender
+    }
+    else if(col=="Preferred Store format"){
+      this.showflag=true
+      this.filterarray=this.Preferred_Store_format
+    }
+    else if(col=="Region"){
+      this.showflag=true
+      this.filterarray=this.Region
+    }
+    else if(col=="State"){
+      this.showflag=true
+      this.filterarray=this.State
+    }
+    else if(col=="Preferred Product Category"){
+      this.showflag=true
+      this.filterarray=this.Preferred_Product_Category
+    }
+    else if(col=="Preferred Product Sub Category"){
+      this.showflag=true
+      this.filterarray=this.Preferred_Product_Sub_Category
+    }
+    else if(col=="Merch Types"){
+      this.showflag=true
+      this.filterarray=this.merchtypes
+    }
+    else if(col=="Preferred Product Department"){
+      this.showflag=true
+      this.filterarray=this.Preferred_Product_Department
+    }
+    else{
+      this.showflag=false
+    }
   }
 
 }
