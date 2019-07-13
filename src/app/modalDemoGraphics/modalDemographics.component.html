@@ -22,6 +22,10 @@
 </div> -->
 
 
+<!-- <button mat-raised-button (click)="submitActivity(activityForm)"
+[mat-dialog-close]="closeDialog" style="background-color: seagreen;align-self: center;">
+ Country&nbsp;
+</button>
 <h1 mat-dialog-title>Node key: {{data.key}}</h1>
 <div mat-dialog-content>
   Country:
@@ -44,7 +48,38 @@
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="data" cdkFocusInitial>OK</button>
   <button mat-button [mat-dialog-close]="null">Cancel</button>
-</div>
+</div> -->
 
-
-
+<form [formGroup]="DemographicsForm" novalidate="novalidate" >
+  
+<mat-form-field class="example-chip-list">
+    <mat-chip-list #chipList aria-label="Fruit selection">
+      <mat-chip
+        *ngFor="let fruit of SelectedAges"
+        [selectable]=true
+        [removable]=true
+        (removed)="remove(fruit)">
+        {{fruit}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Age ex: >33 ,=45" 
+        #fruitInput
+        formControlName="Age"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let fruit of filteredAge | async" [value]="fruit">
+        {{fruit}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="submit(DemographicsForm)">OK</button>
+    <button mat-button [mat-dialog-close]="null">Cancel</button>
+  </div>
+</form>

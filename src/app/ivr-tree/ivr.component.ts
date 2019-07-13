@@ -8,6 +8,7 @@ import { TerminalcomponentComponent } from '../terminalcomponent/terminalcompone
 import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.component';
 import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
 import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
+import { DemographicsService } from '../demographics.service';
 go.Shape.defineFigureGenerator("RoundedRightRectangle", function (shape, w, h) {
     // this figure takes one parameter, the size of the corner
     var p1 = h / 2;  // default corner size
@@ -73,6 +74,7 @@ export class IvrComponent implements OnInit {
 
     @ViewChild('paletteDiv')
     private paletteRef: ElementRef;
+    message: string;
 
     @Input()
     get model(): go.Model { return this.diagram.model; }
@@ -97,7 +99,7 @@ export class IvrComponent implements OnInit {
     linkDataArrayInsideIVR = [];
 
 
-    constructor(public dialog: MatDialog) {
+    constructor(public dialog: MatDialog,private _demographicservice:DemographicsService) {
 
         const $ = go.GraphObject.make;
         // Place GoJS license key here:
@@ -918,8 +920,9 @@ export class IvrComponent implements OnInit {
     }
 
     findCorrectParent(result) {
+        
         var parentLink = this.linkDataArrayInsideIVR.find((el) => {
-            return el.to === result.key;
+            return el.to === result["key"];
         })
         console.log("parentLink", parentLink);
         // use parent.from to get the data to filter upon
@@ -937,34 +940,56 @@ export class IvrComponent implements OnInit {
             data: { key: data.key, question: data.question, actions: data.actions }
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log("result", result);
-            if (result.country) {
-
-                result.actions.push({ text: result.country, fill: "green" })
-            }
-
-            if (result.gender) {
-
-                result.actions.push({ text: result.gender, fill: "yellow" })
-            }
-            if (result.age) {
-
-                // result.actions.push({ text: result.age, fill: "blue" })
-            }
-            if (result.income) {
-
-                // result.actions.push({ text: result.income, fill: "dodgerblue" })
-            }
+        dialogRef.afterClosed().subscribe(res => {
+            
+            this._demographicservice.currentMessage.subscribe(message => this.message = message)
+            
+            console.log("message",this.message)
+            let result=this.message['datainner']
+            console.log("resultkey", result["key"]);
+           // if (result.country) {
+//
+           //     //result.actions.push({ text: result.country, fill: "green" })
+           // }
+//
+           // if (result.gender) {
+//
+           //     //result.actions.push({ text: result.gender, fill: "yellow" })
+           // }
+           // if (result.age) {
+//
+           //     // result.actions.push({ text: result.age, fill: "blue" })
+           // }
+           // if (result.income) {
+//
+           //     // result.actions.push({ text: result.income, fill: "dodgerblue" })
+           // }
             // console.log("final result", result);
             // console.log("all of the customers", this.allCustomersArray);
             // console.log("data", data);
+            
             var nodeToActUpon = this.findCorrectParent(result)
-            let ageIncomeFilteredCustomers = nodeToActUpon.filtered.filter((customer) => {
-                return ((customer.Age < result.age) || (Number(customer.Income) < Number(result.income)))
+            console.log("nodetoactupon",nodeToActUpon)
+            let innerage=result["Age"];
+            let ageFilteredCustomers:any
+            innerage.forEach(age => {
+                if(age.indexOf(">")!=-1){
+                    let actualage=age.split(">")
+                    
+                    console.log(actualage)
+                    ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
+
+                        return (customer.Age > actualage[1])
+                    });
+                }
+                
             });
-            console.log('filtered customers based on age and income', ageIncomeFilteredCustomers);
-            data.filtered = ageIncomeFilteredCustomers
+            // let ageIncomeFilteredCustomers = nodeToActUpon.filtered.filter((customer) => {
+
+            //     return ((customer.Age < result.age) || (Number(customer.Income) < Number(result.income)))
+            // });
+            console.log('filtered customers based on age and income', ageFilteredCustomers);
+            data.filtered = ageFilteredCustomers
             // result.filtered = ageIncomeFilteredCustomers;
             // this.nodeMetrics.emit(result);
             // result.actions.push({})
