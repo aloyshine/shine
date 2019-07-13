@@ -1,8 +1,20 @@
-<div>
+<h1 class="fixed-top">Campaign Management</h1>
+<div class="full-height">
+  
+    <mat-tab-group>
+        
+        <mat-tab label="Build Audience Segment" isActive:true> 
+            <app-ivr [model]="modelIVR" (terminalevent)="openterminaldialog($event)" (nodeMetrics)="onReceiveNodeMetrics($event)"
+            (nodeSelected)="makeConnection($event)" (typeOfNode)="addIvrNode($event)"></app-ivr> 
+        </mat-tab>
+        <mat-tab label="Product to Promote">Product to Promote </mat-tab>
+        <mat-tab label="Test Audience">Test Audience </mat-tab>
+        <mat-tab label="Creative Template">Creative Template </mat-tab>
+      </mat-tab-group>
+     
   <!-- <app-diagram-editor [model]="model" (typeOfNode)="addNode($event)" >
   </app-diagram-editor>   -->
-  <app-ivr [model]="modelIVR" (terminalevent)="openterminaldialog($event)" (nodeMetrics)="onReceiveNodeMetrics($event)"
-    (nodeSelected)="makeConnection($event)" (typeOfNode)="addIvrNode($event)"></app-ivr>
+  
 </div>
 
 <!-- <button (click)="someFunc()">aaaa</button> -->

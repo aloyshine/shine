@@ -12,3 +12,28 @@ h1{
     color: #fff;
     
 }
+/* :host{
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+  } */
+
+.mat-tab-group{
+    height: 100%;
+    
+}
+.mat-tab-body-wrapper {
+    flex-grow: 1;
+}
+
+.mat-tab-body {
+    display: flex !important;
+    flex-direction: column;
+}
+
+.mat-tab-body-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.component{ height: 100%; }

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { TerminalcomponentComponent } from './terminalcomponent/terminalcomponent.component';
 import { TerminalService } from './terminal.service';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import {MatTabsModule} from '@angular/material/tabs';
 
 interface INodeData {
   key?: number, question?: "All Customers", isGroup?: boolean, group?: number, source: any,
