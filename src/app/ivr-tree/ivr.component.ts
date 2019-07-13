@@ -729,16 +729,81 @@ export class IvrComponent implements OnInit {
         // initialize contents of Palette
         this.palette.model.nodeDataArray =
             [
-                { key: 1, question: "All Customers", color: "lightblue" ,source:'https://cdn1.iconfinder.com/data/icons/business-minimal/512/social__person_Group_Business_community_teamwork_relationship-512.png' },
-                { key: 2, question: "Demographics", color: "#F1C40F" ,source:'https://i.ibb.co/ScF5fFQ/156283676431409527.png'},
-                { key: 3, question: "Email", color: "#32B8B3" , source:'https://www.stickpng.com/assets/thumbs/584856b4e0bb315b0f7675ac.png'},
-                { key: 4, question: "Purchase", color: "#8046b2", source:'https://pngriver.com/wp-content/uploads/2018/04/Download-Shopping-Cart-Png-Image-75838-For-Designing-Projects.png' },
-                { key: 5, question: "Customer Engagement", color: "#4687b2" ,source:'https://cdn2.iconfinder.com/data/icons/lightly-icons/30/user-480.png'},
-                { key: 6, question: "Model Qualifiers", color: "#B24646" ,source: 'https://i.ibb.co/16C7fDZ/imageedit-3-8418722331.png'},
-                { key: 7, question: "Geography", color: "#16A085" ,source:'https://ya-webdesign.com/images/black-and-white-globe-png.png'},
-                { key: 8, question: "Customer Persona", color: "#F5B041", source:'https://cdn3.iconfinder.com/data/icons/online-user/120/user-edit-1-512.png' },
-                { key: 9, question: "Pro Attributes", color: "#82E0AA  " ,source:'http://cdn.onlinewebfonts.com/svg/img_164241.png' },
-                { key: 10, question: "Terminal", color: "yellow" },
+                // { key: 1, question: "All Customers", color: "lightblue", actions: [] },
+                // { key: 2, question: "Demographics", color: "lightgreen", actions: [] },
+                // { key: 3, question: "Email", color: "orange", actions: [] },
+                // { key: 4, question: "Purchase", color: "pink", actions: [] },
+                // { key: 5, question: "Customer Engagement", color: "yellow", actions: [] },
+                // { key: 6, question: "Model Qualifiers", color: "yellow", actions: [] },
+                // { key: 7, question: "Geography", color: "yellow", actions: [] },
+                // { key: 8, question: "Customer Persona", color: "yellow", actions: [] },
+                // { key: 9, question: "Pro Attributes", color: "yellow", actions: [] },
+                // { key: 10, question: "Graph Create", color: "yellow", actions: [] },
+                // { key: 11, question: "Terminal", color: "yellow", actions: [] },
+                {
+                    key: 1,
+                    question: "All Customers",
+                    color: "lightblue", source: './assets/social__person_Group_Business_community_teamwork_relationship-512.png'
+                },
+
+                {
+                    key: 2,
+                    question: "Demographics",
+                    color: "#F1C40F", source: './assets/156283676431409527.png'
+                },
+
+                {
+                    key: 3,
+                    question: "Email",
+                    color: "#32B8B3",
+                    source: './assets/584856b4e0bb315b0f7675ac.png'
+                },
+
+                {
+                    key: 4,
+                    question: "Purchase",
+                    color: "#8046b2",
+                    source: './assets/Download-Shopping-Cart-Png-Image-75838-For-Designing-Projects.png'
+                },
+
+                {
+                    key: 5,
+                    question: "Customer Engagement",
+                    color: "#4687b2", source: './assets/user-480.png'
+                },
+
+                {
+                    key: 6,
+                    question: "Model Qualifiers",
+                    color: "#B24646", source: './assets/imageedit-3-8418722331.png'
+
+                },
+
+                {
+                    key: 7,
+                    question: "Geography",
+                    color: "#16A085", source: 'https://ya-webdesign.com/images/black-and-white-globe-png.png'
+                },
+
+                {
+                    key: 8,
+                    question: "Customer Persona",
+                    color: "#F5B041",
+                    source: 'https://cdn3.iconfinder.com/data/icons/online-user/120/user-edit-1-512.png'
+                },
+
+                {
+                    key: 9,
+                    question: "Pro Attributes",
+                    color: "#82E0AA ", source: 'http://cdn.onlinewebfonts.com/svg/img_164241.png'
+                },
+
+                {
+                    key: 10,
+                    question: "Terminal",
+                    color: "yellow"
+                },
+
             ];
     }
 
