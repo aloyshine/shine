@@ -72,15 +72,16 @@
       <mat-form-field>
           <mat-label>Select Category</mat-label>
           <mat-select formControlName="catnames">
-            <mat-option *ngFor="let cat of filterarray" [value]="cat">
+            <mat-option *ngFor="let cat of filterarray" [value]="cat" (click)="setcategory(cat)">
               {{cat}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 <ng-template #textfield>
-    <mat-form-field class="example-chip-list">
-        <mat-chip-list #chipList aria-label="Fruit selection">
+    <mat-form-field >
+        <input placeholder="Enter the required filter" color="primary" matInput  formControlName="catinput" />
+        <!-- <mat-chip-list #chipList aria-label="Fruit selection">
           <mat-chip
             *ngFor="let fruit of SelectedAges"
             [selectable]=true
@@ -103,12 +104,28 @@
           <mat-option *ngFor="let fruit of filteredAge | async" [value]="fruit">
             {{fruit}}
           </mat-option>
-        </mat-autocomplete>
+        </mat-autocomplete> -->
       </mat-form-field>
 </ng-template>
-
+<div>
+    <button mat-button cdkFocusInitial (click)="addfilter()">Add Filter</button>
+    <button mat-button cdkFocusInitial (click)="Addcondition(1)">And</button>
+    <button mat-button cdkFocusInitial (click)="Addcondition(2)">Or</button>
+</div>
   <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="submit(DemographicsForm)">OK</button>
     <button mat-button [mat-dialog-close]="null">Cancel</button>
   </div>
 </form>
+<div style="overflow:auto;flex-grow:1;max-height:500px;max-width:500px;">
+    <mat-list #skill >
+
+        <mat-list-item *ngFor="let filter of totalfilter"  style="border-bottom: 1px solid;
+        border-color:lightsteelblue;padding-top:15px;padding-bottom:15px; height:auto; ">
+      
+        {{filter}}
+        <!-- <mat-icon matListIcon class="matclickhide"> cancel </mat-icon> -->
+                        
+        </mat-list-item>
+    </mat-list>
+</div>

@@ -23,7 +23,10 @@ export class ModalComponent1 implements OnInit {
   filteredAge
   parent:any;
   showflag:boolean=false;
+  selcol:any
+  selcat:any
   SelectedAges=[]
+  totalfilter=[]
   columnnames=["memberid",
     "Gasolene_Fuel_Amount",
     "Diesel_Fuel_Amount",
@@ -112,6 +115,7 @@ gender=["Prefer not to say",
       this.DemographicsForm.addControl('Age', new FormControl(this.SelectedAges ? this.SelectedAges : null))
       this.DemographicsForm.addControl('colnames', new FormControl(''))
       this.DemographicsForm.addControl('catnames', new FormControl(''))
+      this.DemographicsForm.addControl('catinput', new FormControl(''))
       this.filteredAge =  this.DemographicsForm.controls.Age.valueChanges.pipe(
         startWith(null),
         map((age: string | null) => age ? this._filter(age) : this.AllAge.slice()));
@@ -176,6 +180,7 @@ gender=["Prefer not to say",
 
   setfield(col)
   {
+   this.selcol=col
     if(col=="Gender"){
       this.showflag=true
       this.filterarray=this.gender
@@ -212,5 +217,34 @@ gender=["Prefer not to say",
       this.showflag=false
     }
   }
-
+  setcategory(cat){
+    this.selcat=cat
+  }
+  addfilter(){
+    if(this.showflag==true)
+    {
+      let filtername=this.selcol+" "+this.selcat
+      this.totalfilter.push(filtername)
+      console.log("total filter",this.totalfilter)
+    }
+    else{
+      let filtername=this.selcol+" "+this.DemographicsForm.controls["catinput"].value
+      this.totalfilter.push(filtername)
+      console.log("total filter",this.totalfilter)
+    }
+   
+  }
+  Addcondition(val){
+    if(this.totalfilter.length!=0)
+    {
+      if(val==1){
+        this.totalfilter.push("And")
+      }
+      else if(val==2){
+        this.totalfilter.push("Or")
+      }
+     
+    }
+    console.log("total filter",this.totalfilter)
+  }
 }

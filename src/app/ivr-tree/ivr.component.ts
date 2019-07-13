@@ -835,7 +835,7 @@ export class IvrComponent implements OnInit {
     openDialogGeography(data: any): void {
         console.log("inside open dialog geography", data);
         const dialogRef = this.dialog.open(ModalComponent, {
-            width: '250px',
+            width: '250px',disableClose: true,
             // data: { key: data.key, text: data.text, color: data.color, spending: data.spending }
             data: { key: data.key, question: data.question, actions: data.actions }
         });
@@ -981,6 +981,7 @@ export class IvrComponent implements OnInit {
 
                         return (customer.Age > actualage[1])
                     });
+                    
                 }
                 
             });
