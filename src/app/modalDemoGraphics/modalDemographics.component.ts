@@ -171,7 +171,7 @@ gender=["Prefer not to say",
     let req={
       datainner:{
           key:this.parent,
-          Age:this.SelectedAges
+          totalfilter:this.totalfilter
        }
     }
     this._demographicservice.changeMessage(req)
@@ -223,12 +223,12 @@ gender=["Prefer not to say",
   addfilter(){
     if(this.showflag==true)
     {
-      let filtername=this.selcol+" "+this.selcat
+      let filtername=this.selcol+"==="+this.selcat
       this.totalfilter.push(filtername)
       console.log("total filter",this.totalfilter)
     }
     else{
-      let filtername=this.selcol+" "+this.DemographicsForm.controls["catinput"].value
+      let filtername=this.selcol+this.DemographicsForm.controls["catinput"].value
       this.totalfilter.push(filtername)
       console.log("total filter",this.totalfilter)
     }

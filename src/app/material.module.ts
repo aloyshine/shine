@@ -7,6 +7,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @NgModule({
   exports: 
@@ -19,6 +20,6 @@ import {MatListModule} from '@angular/material/list';
       MatTabsModule,
       MatChipsModule,
       MatAutocompleteModule,
-      MatIconModule,MatListModule]
+      MatIconModule,MatListModule,MatToolbarModule]
 })
 export class MaterialModule {}
