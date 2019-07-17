@@ -28,11 +28,10 @@ export class ModalComponent1 implements OnInit {
   SelectedAges=[]
   totalfilter=[]
   columnnames=[
-    "Age",
-    "Gender",
-    "preferred storeformat",
-    "Region",
-    "State",
+    "age",
+    "gender",
+    "preferred_storeformat",
+    "state",
     "tank_size",
     "Car_model",	
     "annual_hh_income",
@@ -45,7 +44,14 @@ export class ModalComponent1 implements OnInit {
   merchtypes=["Tobacco","Fuel","Non-Tobacco"]
   Preferred_Store_format=["Small","Kiosk","Large"]
   Region=["Midwest","Southeast","Southwest"]
-  State=["Arkansas","Oklahama","Ohio","Texas","Alaska"]
+  State=["TX",
+    "TX",
+   "KY",
+    "TN",
+    "AR",
+    "PA",
+    "OK"
+    ]
   Preferred_Product_Category=["Other Tobacco",
   "Cigarettes",
   "Wine",
@@ -211,11 +217,11 @@ gender=["Prefer not to say",
   {
    this.selcol=col
    console.log("selected col",this.selcol)
-    if(col=="Gender"){
+    if(col=="gender"){
       this.showflag=true
       this.filterarray=this.gender
     }
-    else if(col=="preferred storeformat"){
+    else if(col=="preferred_storeformat"){
       this.showflag=true
       this.filterarray=this.Preferred_Store_format
     }
@@ -223,7 +229,7 @@ gender=["Prefer not to say",
       this.showflag=true
       this.filterarray=this.Region
     }
-    else if(col=="State"){
+    else if(col=="state"){
       this.showflag=true
       this.filterarray=this.State
     }
@@ -247,7 +253,7 @@ gender=["Prefer not to say",
       this.showflag=true
       this.filterarray=this.tank_size
     }
-    else if(col=="carmodel"){
+    else if(col=="Car_model"){
       this.showflag=true
       this.filterarray=this.carmodel
     }
@@ -267,7 +273,7 @@ gender=["Prefer not to say",
       this.showflag=true
       this.filterarray=this.employment_status
     }
-    else if(col=="Age"){
+    else if(col=="age"){
       this.showflag=false
     }
     else{

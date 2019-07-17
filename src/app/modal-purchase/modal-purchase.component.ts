@@ -177,7 +177,7 @@ gender=["Prefer not to say",
   setfield(col)
   {
    this.selcol=col
-    if(col=="Gender"){
+    if(col=="gender"){
       this.showflag=true
       this.filterarray=this.gender
     }
