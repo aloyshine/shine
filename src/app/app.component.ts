@@ -246,7 +246,7 @@ export class AppComponent {
       ], category: obj.category, originOfTerminal: parentOfTerminalNode,
       label: obj.label, color: obj.color, source: obj.source, filtered: []
     });
-
+    console.log("here")
     // this.linkDataArray.push({
     //   from: obj.key,
     //   to: this.counter1

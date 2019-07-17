@@ -9,6 +9,7 @@ import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.componen
 import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
 import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
 import { DemographicsService } from '../demographics.service';
+//import{json2csv} from '../../../node_modules/json2csv'
 go.Shape.defineFigureGenerator("RoundedRightRectangle", function (shape, w, h) {
     // this figure takes one parameter, the size of the corner
     var p1 = h / 2;  // default corner size
@@ -129,7 +130,9 @@ export class IvrComponent implements OnInit {
                 // check if an element exists in array using a comparer function
                 // comparer : function(currentElement)
                 function inArray(arr1, comparer) {
+                    console.log(arr1,comparer)
                     for (var i = 0; i < arr1.length; i++) {
+                        console.log("comparing")
                         if (comparer(arr1[i])) return true;
                     }
                     return false;
@@ -138,19 +141,22 @@ export class IvrComponent implements OnInit {
                 // adds an element to the array if it does not already exist using a comparer
                 // function
                 function pushIfNotExist(arr, element, comparer) {
+                    console.log(arr, element, comparer)
                     if (!inArray(arr, comparer)) {
+                        console.log("pusing data")
                         arr.push(element);
                     }
                 };
+                //debugger;
                 if (node.data.question) {
-                    // debugger;
+                   
                     pushIfNotExist(this.nodeDataArrayInsideIVR, node.data, function (e) {
                         return e.key === node.data.key;
                     });
 
                 } else {
                     pushIfNotExist(this.linkDataArrayInsideIVR, node.data, function (e) {
-                        return e.from === node.data.from;
+                        return e.from === node.data.from && e.to===node.data.to;
                     });
 
                 }
@@ -508,8 +514,14 @@ export class IvrComponent implements OnInit {
                             },
                             new go.Binding("text", "question")
                         ),
+                    
+                       
+                            
+                        
+                
 
                     ),
+                   
                     { margin: 3 },
                     // the title
 
@@ -744,20 +756,20 @@ export class IvrComponent implements OnInit {
                 // { key: 11, question: "Terminal", color: "yellow", actions: [] },
                 {
                     key: 1,
-                    question: "All Customers",
+                    question: "All Customers",info:"info",
                     color: "lightblue", source: './assets/social__person_Group_Business_community_teamwork_relationship-512.png'
                 },
 
                 {
                     key: 2,
-                    question: "Demographics",
+                    question: "Demographics",info:"info",
                     color: "#F1C40F", source: './assets/156283676431409527.png'
                 },
 
                 {
                     key: 3,
                     question: "Email",
-                    color: "#32B8B3",
+                    color: "#32B8B3",info:"info",
                     source: './assets/584856b4e0bb315b0f7675ac.png'
                 },
 
@@ -872,11 +884,282 @@ export class IvrComponent implements OnInit {
             data: { key: data.key, question: data.question, actions: data.actions }
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log("result", result);
-            result.actions.push({ text: result.purchase, fill: "red" })
-            console.log("final result", result);
-            this.nodeMetrics.emit(result);
+        // dialogRef.afterClosed().subscribe(result => {
+        //     // console.log("result", result);
+        //     // result.actions.push({ text: result.purchase, fill: "red" })
+        //     // console.log("final result", result);
+        //     // this.nodeMetrics.emit(result);
+
+
+        //     // result.actions.push({})
+        //     // if (result) {
+        //     //     this.diagram.model.commit(function (m) {
+        //     //         console.log("m", m);
+        //     //         m.set(data, "income", result.income);
+        //     //         // m.set(data, "color", result.color);
+        //     //         // m.set(data, "spending", result.spending);
+        //     //     }, "modified node properties");
+        //     //     // data.actions.push({ text: data.income, figure: "ElectricalHazard", fill: "green" })
+        //     // }
+        //     // console.log("inside open dialog after", data);
+        // });
+        dialogRef.afterClosed().subscribe(res => {
+            
+            this._demographicservice.currentMessage.subscribe(message => this.message = message)
+            
+            console.log("message",this.message)
+            let result=this.message['datainner']
+            console.log("resultkey", result["key"]);
+           // if (result.country) {
+//
+           //     //result.actions.push({ text: result.country, fill: "green" })
+           // }
+//
+           // if (result.gender) {
+//
+           //     //result.actions.push({ text: result.gender, fill: "yellow" })
+           // }
+           // if (result.age) {
+//
+           //     // result.actions.push({ text: result.age, fill: "blue" })
+           // }
+           // if (result.income) {
+//
+           //     // result.actions.push({ text: result.income, fill: "dodgerblue" })
+           // }
+            // console.log("final result", result);
+            // console.log("all of the customers", this.allCustomersArray);
+            // console.log("data", data);
+            
+            var nodeToActUpon = this.findCorrectParent(result)
+            console.log("nodetoactupon",nodeToActUpon)
+            let innerfilters=result["totalfilter"];
+            let ageFilteredCustomers:any
+            let tempfilterednodes:any
+            let validflag:Boolean;
+            let prevvalidflag:any
+            let exp=[]
+            let expvalid:Boolean;
+            innerfilters.forEach(filter => {
+                if((filter=="And")||(filter=="Or"))
+                {
+                  exp.push(filter)
+                }
+            });
+        
+            ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
+                validflag=true
+                
+                let values=[]
+                innerfilters.forEach(filter => {
+                    if((filter=="And")||(filter=="Or"))
+                    {
+                       // if(prevvalidflag==true)
+                        //exp.push(filter)
+                    }
+                    else{
+                        if((filter.indexOf(">")!=-1)&&(filter.indexOf("=")==-1)){
+                            let actualval=filter.split(">")
+                         
+                          //  console.log("actualval",actualval)
+                            actualval[0]=actualval[0].trim()
+                            let colname=actualval[0]
+                            let amount=actualval[1]
+                            //debugger;
+                            //ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
+                               
+                              
+                               // console.log("customerval",customer,colname,amount,customer[colname])
+                               // console.log("added",customer[colname] > amount)
+                               if(Number(customer[colname]) > Number(amount))
+                               {
+                                   
+                               }
+                               else{
+                                   validflag=false;
+                               }
+                            //});
+                            
+                        }
+                        else if((filter.indexOf("<")!=-1 )&&(filter.indexOf("=")==-1)){
+                            let actualval=filter.split("<")
+                            //console.log("actualval",actualval)
+                            actualval[0]=actualval[0].trim()
+                            let colname=actualval[0]
+                            let amount=actualval[1]
+                           // ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
+                           // console.log("customerval",customer,colname,amount,customer[colname])
+                            if(Number(customer[colname]) < Number(amount))
+                            {
+                                
+                            }
+                            else{
+                                validflag=false;
+                            }
+                                // (customer[actualval[0]] < actualval[1])
+                            //});
+                            
+                        }
+                        else if(filter.indexOf("<=")!=-1){
+                            let actualval=filter.split("<=")
+                            
+                          //  console.log("actualval",actualval)
+                            actualval[0]=actualval[0].trim()
+                            let colname=actualval[0]
+                            let amount=actualval[1]
+                            //ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
+        //
+                            //    return (customer[actualval[0]] <= actualval[1])
+                            //});
+                           // console.log("customerval",customer,colname,amount,customer[colname])
+                            if(Number(customer[colname]) <= Number(amount))
+                            {
+                                
+                            }
+                            else{
+                                validflag=false;
+                            }
+                            
+                        }
+                        else if(filter.indexOf(">=")!=-1){
+                            let actualval=filter.split(">=")
+                           // console.log("actualval",actualval)
+                            actualval[0]=actualval[0].trim()
+                            let colname=actualval[0]
+                            let amount=actualval[1]
+                            
+                           // console.log(actualval)
+                           // ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
+        //
+                           //     return (customer[actualval[0]]>= actualval[1])
+                           // });
+                          console.log("customerval",customer,colname,amount,customer[colname])
+                           if(Number(customer[colname]) >= Number(amount))
+                           {
+                               
+                           }
+                           else{
+                               validflag=false;
+                           }
+                            
+                        }
+                        else if(filter.indexOf("~")!=-1){
+                            let actualval=filter.split("~")
+                            console.log("actualval///////////////////////",actualval)
+                            actualval[0]=actualval[0].trim()
+                            let colname=actualval[0]
+                            let amount=actualval[1].trim();
+                            console.log("customerval",customer,colname,amount,customer[colname])
+                            if(customer[colname]!=null)
+                            {
+                                if(customer[colname]== amount)
+                                {
+                                    
+                                }
+                                else{
+                                    validflag=false;
+                                }
+
+                            }
+                            else{
+                                validflag=false;
+                            }
+                            
+    
+                        }
+                        else if(filter.indexOf("=")!=-1){
+                            let actualval=filter.split("=")
+                           
+                           // console.log("actualval",actualval)
+                            actualval[0]=actualval[0].trim()
+                            let colname=actualval[0]
+                            let amount=actualval[1]
+                            //console.log("customerval",customer,colname,amount,customer[colname])
+                            if(Number(customer[colname]) == Number(amount))
+                            {
+                                
+                            }
+                            else{
+                                validflag=false;
+                            }
+                            
+                            //console.log(actualval)
+                            //ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
+        //
+                            //    return (customer[actualval[0]] = actualval[1])
+                            //});
+                            
+                        }
+
+                        values.push(validflag)
+                    }
+                    
+                });
+                //let tt=
+                
+               console.log("values",values)
+               console.log("exp",exp)
+               let breakflag=false;
+               let totalflag=values[0];
+             //  debugger;
+               for(let i=1;i< values.length; i++){
+
+                   for(let j=0;j<exp.length;j++){
+                       if(exp[j]=="And")
+                       {
+                           if(totalflag && values[i])
+                           {
+                               totalflag=true
+                           }
+                           else{
+                               totalflag=false
+                               breakflag=true
+                               break;
+                           }
+                       }
+                       if(exp[j]=="Or"){
+                        if(totalflag || values[i])
+                        {
+                            totalflag=true
+                        }
+                        else{
+                            totalflag=false
+                            breakflag=true
+                            break;
+                        }
+                       }
+                        
+                   }
+                   if(breakflag==true){
+                       break;
+                   }
+
+               }
+               console.log(totalflag)
+               console.log("nodeDataArrayInsideIVR", this.nodeDataArrayInsideIVR)
+               console.log("linkDataArrayInsideIVR", this.linkDataArrayInsideIVR);
+               return(totalflag)
+               
+
+            });
+            //innerfilters.forEach(filter => {
+            //    // if((filter=="And")||(filter=="Or")){
+            //        
+            //    // }
+            // 
+            //   
+            //    
+            //});
+            // let ageIncomeFilteredCustomers = nodeToActUpon.filtered.filter((customer) => {
+
+            //     return ((customer.Age < result.age) || (Number(customer.Income) < Number(result.income)))
+            // });
+            console.log('filtered customers based on age and income', ageFilteredCustomers);
+            data.filtered = ageFilteredCustomers
+            data.totalfilters= innerfilters
+            console.log("finalnode",data)
+            // result.filtered = ageIncomeFilteredCustomers;
+            // this.nodeMetrics.emit(result);
             // result.actions.push({})
             // if (result) {
             //     this.diagram.model.commit(function (m) {
@@ -931,6 +1214,9 @@ export class IvrComponent implements OnInit {
         })
         console.log("nodeToActUpon", nodeToActUpon);
         return nodeToActUpon;
+    }
+    openinfodialog(data){
+            console.log("called",data)
     }
     openDialogDemographics(data: any): void {
         console.log("inside open dialog demographics", data);
@@ -998,7 +1284,7 @@ export class IvrComponent implements OnInit {
                         if((filter.indexOf(">")!=-1)&&(filter.indexOf("=")==-1)){
                             let actualval=filter.split(">")
                          
-                            console.log("actualval",actualval)
+                          //  console.log("actualval",actualval)
                             actualval[0]=actualval[0].trim()
                             let colname=actualval[0]
                             let amount=actualval[1]
@@ -1006,7 +1292,7 @@ export class IvrComponent implements OnInit {
                             //ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
                                
                               
-                                console.log("customerval",customer,colname,amount,customer[colname])
+                               // console.log("customerval",customer,colname,amount,customer[colname])
                                // console.log("added",customer[colname] > amount)
                                if(Number(customer[colname]) > Number(amount))
                                {
@@ -1020,12 +1306,12 @@ export class IvrComponent implements OnInit {
                         }
                         else if((filter.indexOf("<")!=-1 )&&(filter.indexOf("=")==-1)){
                             let actualval=filter.split("<")
-                            console.log("actualval",actualval)
+                            //console.log("actualval",actualval)
                             actualval[0]=actualval[0].trim()
                             let colname=actualval[0]
                             let amount=actualval[1]
                            // ageFilteredCustomers=nodeToActUpon.filtered.filter((customer) => {
-                            console.log("customerval",customer,colname,amount,customer[colname])
+                           // console.log("customerval",customer,colname,amount,customer[colname])
                             if(Number(customer[colname]) < Number(amount))
                             {
                                 
@@ -1040,7 +1326,7 @@ export class IvrComponent implements OnInit {
                         else if(filter.indexOf("<=")!=-1){
                             let actualval=filter.split("<=")
                             
-                            console.log("actualval",actualval)
+                          //  console.log("actualval",actualval)
                             actualval[0]=actualval[0].trim()
                             let colname=actualval[0]
                             let amount=actualval[1]
@@ -1048,7 +1334,7 @@ export class IvrComponent implements OnInit {
         //
                             //    return (customer[actualval[0]] <= actualval[1])
                             //});
-                            console.log("customerval",customer,colname,amount,customer[colname])
+                           // console.log("customerval",customer,colname,amount,customer[colname])
                             if(Number(customer[colname]) <= Number(amount))
                             {
                                 
@@ -1060,7 +1346,7 @@ export class IvrComponent implements OnInit {
                         }
                         else if(filter.indexOf(">=")!=-1){
                             let actualval=filter.split(">=")
-                            console.log("actualval",actualval)
+                           // console.log("actualval",actualval)
                             actualval[0]=actualval[0].trim()
                             let colname=actualval[0]
                             let amount=actualval[1]
@@ -1070,7 +1356,7 @@ export class IvrComponent implements OnInit {
         //
                            //     return (customer[actualval[0]]>= actualval[1])
                            // });
-                           console.log("customerval",customer,colname,amount,customer[colname])
+                          // console.log("customerval",customer,colname,amount,customer[colname])
                            if(Number(customer[colname]) >= Number(amount))
                            {
                                
@@ -1080,31 +1366,40 @@ export class IvrComponent implements OnInit {
                            }
                             
                         }
-                        else if(filter.indexOf("===")!=-1){
-                            let actualval=filter.split("===")
-                            console.log("actualval",actualval)
+                        else if(filter.indexOf("~")!=-1){
+                            debugger
+                            let actualval=filter.split("~")
+                            console.log("actualval///////////////////////",actualval)
                             actualval[0]=actualval[0].trim()
                             let colname=actualval[0]
-                            let amount=actualval[1]
+                            let amount=actualval[1].trim()
                             console.log("customerval",customer,colname,amount,customer[colname])
-                            if(customer[colname]== amount)
+                            if(customer[colname]!=null)
                             {
-                                
+                                if(customer[colname]== amount)
+                                {
+                                    
+                                }
+                                else{
+                                    validflag=false;
+                                }
+
                             }
                             else{
                                 validflag=false;
                             }
+                            
                             
     
                         }
                         else if(filter.indexOf("=")!=-1){
                             let actualval=filter.split("=")
                            
-                            console.log("actualval",actualval)
+                           // console.log("actualval",actualval)
                             actualval[0]=actualval[0].trim()
                             let colname=actualval[0]
                             let amount=actualval[1]
-                            console.log("customerval",customer,colname,amount,customer[colname])
+                            //console.log("customerval",customer,colname,amount,customer[colname])
                             if(Number(customer[colname]) == Number(amount))
                             {
                                 
@@ -1166,7 +1461,10 @@ export class IvrComponent implements OnInit {
 
                }
                console.log(totalflag)
+               console.log("nodeDataArrayInsideIVR", this.nodeDataArrayInsideIVR)
+               console.log("linkDataArrayInsideIVR", this.linkDataArrayInsideIVR);
                return(totalflag)
+               
 
             });
             //innerfilters.forEach(filter => {
@@ -1183,6 +1481,8 @@ export class IvrComponent implements OnInit {
             // });
             console.log('filtered customers based on age and income', ageFilteredCustomers);
             data.filtered = ageFilteredCustomers
+            data.totalfilters= innerfilters
+            console.log("finalnode",data)
             // result.filtered = ageIncomeFilteredCustomers;
             // this.nodeMetrics.emit(result);
             // result.actions.push({})
@@ -1201,7 +1501,8 @@ export class IvrComponent implements OnInit {
     }
     saveasCSV()
     {
-       
+       // const { Parser } = require('json2csv');
+
     }
 
     openTerminalDialog(data) {

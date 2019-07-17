@@ -27,29 +27,19 @@ export class ModalComponent1 implements OnInit {
   selcat:any
   SelectedAges=[]
   totalfilter=[]
-  columnnames=["memberid",
-    "Gasolene_Fuel_Amount",
-    "Diesel_Fuel_Amount",
-   "MerchAmount",
-    "Gasolene_Fuel_Gallons",
-    "Diesel_Fuel_Gallons",
-   "MerchUnits",
-    "FuelVisit",
-    "MerchVisit",
-    "FuelMerchVisit",
-    "earned_points",
-    "burned_points",
-    "expired_points",
+  columnnames=[
     "Age",
-    "Income",
     "Gender",
-    "Preferred Store format",
+    "preferred storeformat",
     "Region",
     "State",
-    "Preferred Product Category",
-    "Preferred Product Sub Category",
-    "Merch Types",
-    "Preferred Product Department",
+    "tank_size",
+    "Car_model",	
+    "annual_hh_income",
+      "education_level",
+        "marital_status",
+  	"employment_status"
+
     ]
     filterarray=[];
   merchtypes=["Tobacco","Fuel","Non-Tobacco"]
@@ -98,7 +88,46 @@ gender=["Prefer not to say",
   ]
 
 
-
+  tank_size=["13-16",
+  "Above 20",
+  "13-16",
+  "17-20",
+ "Less than 13"
+  ]
+  carmodel=["2016-2014",
+    "2013-2010",
+    "2019-2017",
+    "Pre 2010",
+    "2016-2014"
+    ]
+    annual_hh_income =["$40,000 or less",
+    "$60,000 - $75,000",
+    "$75,000 - $100,000",
+    "$40,000 - $60,000",
+    "$40,000 or less",
+    "Prefer not to share",
+    "More than $100,000"]
+    
+    education_level=["Some college",
+      "College graduate",
+      "High school graduate /GED",
+      "Some college",
+      "Non high school graduate",
+     "Masters degree or higher"
+      ]
+      marital_status= ["Divorced",
+        "Never married",
+        "Married",
+        "Widowed",
+        "Divorced",
+        "Separated"
+        ]
+        employment_status  =["Full time",
+          "Full time",
+          "Retired",
+          "Not employed",
+          "Part time"
+          ]
   
 
   AllAge=["1","3","5"]
@@ -181,11 +210,12 @@ gender=["Prefer not to say",
   setfield(col)
   {
    this.selcol=col
+   console.log("selected col",this.selcol)
     if(col=="Gender"){
       this.showflag=true
       this.filterarray=this.gender
     }
-    else if(col=="Preferred Store format"){
+    else if(col=="preferred storeformat"){
       this.showflag=true
       this.filterarray=this.Preferred_Store_format
     }
@@ -213,6 +243,33 @@ gender=["Prefer not to say",
       this.showflag=true
       this.filterarray=this.Preferred_Product_Department
     }
+    else if(col=="tank_size"){
+      this.showflag=true
+      this.filterarray=this.tank_size
+    }
+    else if(col=="carmodel"){
+      this.showflag=true
+      this.filterarray=this.carmodel
+    }
+    else if(col=="annual_hh_income"){
+      this.showflag=true
+      this.filterarray=this.annual_hh_income
+    }
+    else if(col=="education_level"){
+      this.showflag=true
+      this.filterarray=this.education_level
+    }
+    else if(col=="marital_status"){
+      this.showflag=true
+      this.filterarray=this.marital_status
+    }
+    else if(col=="employment_status"){
+      this.showflag=true
+      this.filterarray=this.employment_status
+    }
+    else if(col=="Age"){
+      this.showflag=false
+    }
     else{
       this.showflag=false
     }
@@ -223,7 +280,7 @@ gender=["Prefer not to say",
   addfilter(){
     if(this.showflag==true)
     {
-      let filtername=this.selcol+"==="+this.selcat
+      let filtername=this.selcol+"~"+this.selcat
       this.totalfilter.push(filtername)
       console.log("total filter",this.totalfilter)
     }
