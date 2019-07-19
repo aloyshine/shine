@@ -9,6 +9,9 @@ import { ModalComponent1 } from '../modalDemoGraphics/modalDemographics.componen
 import { ModalComponent3 } from '../modal-customer-engagement/modal-customer-engagement.component';
 import { ModalComponent2 } from '../modal-purchase/modal-purchase.component';
 import { DemographicsService } from '../demographics.service';
+import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER } from '@angular/cdk/overlay/typings/overlay-directives';
+import { ExportToCsv } from 'export-to-csv';
+import { element } from '@angular/core/src/render3';
 //import{json2csv} from '../../../node_modules/json2csv'
 go.Shape.defineFigureGenerator("RoundedRightRectangle", function (shape, w, h) {
     // this figure takes one parameter, the size of the corner
@@ -98,8 +101,73 @@ export class IvrComponent implements OnInit {
     allCustomersArray = [];
     nodeDataArrayInsideIVR = [];
     linkDataArrayInsideIVR = [];
+    //actualnodes=[];
+    actualnodes=[
+        {
+            key: 1,
+            question: "All Customers",info:"info",
+            color: "lightblue", source: './assets/social__person_Group_Business_community_teamwork_relationship-512.png'
+        },
 
+        {
+            key: 2,
+            question: "Demographics",info:"info",
+            color: "#F1C40F", source: './assets/156283676431409527.png'
+        },
 
+        {
+            key: 3,
+            question: "Email",
+            color: "#32B8B3",info:"info",
+            source: './assets/584856b4e0bb315b0f7675ac.png'
+        },
+
+        {
+            key: 4,
+            question: "Purchase",
+            color: "#8046b2",
+            source: './assets/Download-Shopping-Cart-Png-Image-75838-For-Designing-Projects.png'
+        },
+
+        {
+            key: 5,
+            question: "Customer Engagement",
+            color: "#4687b2", source: './assets/user-480.png'
+        },
+
+        {
+            key: 6,
+            question: "Model Qualifiers",
+            color: "#B24646", source: './assets/imageedit-3-8418722331.png'
+
+        },
+
+        {
+            key: 7,
+            question: "Geography",
+            color: "#16A085", source: 'https://ya-webdesign.com/images/black-and-white-globe-png.png'
+        },
+
+        {
+            key: 8,
+            question: "Customer Persona",
+            color: "#F5B041",
+            source: 'https://cdn3.iconfinder.com/data/icons/online-user/120/user-edit-1-512.png'
+        },
+
+        {
+            key: 9,
+            question: "Pro Attributes",
+            color: "#82E0AA ", source: 'http://cdn.onlinewebfonts.com/svg/img_164241.png'
+        },
+
+        {
+            key: 10,
+            question: "Terminal",
+            color: "yellow"
+        },
+        ];
+        modelIVR = new go.GraphLinksModel(this.nodeDataArrayInsideIVR, this.linkDataArrayInsideIVR)
     constructor(public dialog: MatDialog,private _demographicservice:DemographicsService) {
 
         const $ = go.GraphObject.make;
@@ -111,7 +179,7 @@ export class IvrComponent implements OnInit {
         // this.diagram.draggingTool.dragsTree = true;
         this.diagram.commandHandler.deletesTree = true;
         this.diagram.allowDrop = true;
-
+       // this.diagram.layout=new go.LayeredDigraphLayout();
         this.diagram.undoManager.isEnabled = true;
         // this.diagram.hoverDelay = 100;
         this.diagram.toolManager.draggingTool = new GuidedDraggingTool();
@@ -130,9 +198,9 @@ export class IvrComponent implements OnInit {
                 // check if an element exists in array using a comparer function
                 // comparer : function(currentElement)
                 function inArray(arr1, comparer) {
-                    console.log(arr1,comparer)
+                   // console.log(arr1,comparer)
                     for (var i = 0; i < arr1.length; i++) {
-                        console.log("comparing")
+                        //console.log("comparing")
                         if (comparer(arr1[i])) return true;
                     }
                     return false;
@@ -141,9 +209,9 @@ export class IvrComponent implements OnInit {
                 // adds an element to the array if it does not already exist using a comparer
                 // function
                 function pushIfNotExist(arr, element, comparer) {
-                    console.log(arr, element, comparer)
+                    //console.log(arr, element, comparer)
                     if (!inArray(arr, comparer)) {
-                        console.log("pusing data")
+                        //console.log("pusing data")
                         arr.push(element);
                     }
                 };
@@ -170,10 +238,64 @@ export class IvrComponent implements OnInit {
 
         var that = this;
 
+    
         function addEmail(e, obj) {
             console.log("email sub");
-            that.typeOfNode.emit({ key: obj.part.key, name: 'Email' })
+            console.log(obj.part.key)
+            let tempnodes=[]
+            let lastnode=that.nodeDataArrayInsideIVR[that.nodeDataArrayInsideIVR.length-1]
+            // that.actualnodes.forEach(element => {
+            //     if(element.key==3){
+            //         tempnodes.push(element);
+            //         let tempnode=tempnodes[0];
+                
+            //         let keys=Math.floor(Math.random()*10)+lastnode.key+element.key;
+            //         let keyflag=true
+            //         console.log("keys",keys)
+            //         // that.nodeDataArrayInsideIVR.forEach(ele=>{
+            //         //     if(ele.key==keys)
+            //         //     {
+            //         //        keyflag=false
+            //         //     }
+            //         //     else{
+            //         //         keyflag=true
+            //         //     }
+            //         // })
+            //         // if(keyflag==true){
+            //         //     element.key=keys
+            //         // }
+                   
+            //         tempnode.key=keys
+            //         console.log("tempnode",tempnode)
+            //         console.log("element",element)
+            //         that.nodeDataArrayInsideIVR.push(tempnode)
+            //     }
+              
+            // });
+            let req={
+                    key:Math.floor(Math.random()*10)+lastnode.key ,
+                    question: "Email",
+                    color: "#32B8B3",info:"info",
+                    source: './assets/584856b4e0bb315b0f7675ac.png'
+                }
+            
+            that.nodeDataArrayInsideIVR.push(req)
+            lastnode=that.nodeDataArrayInsideIVR[that.nodeDataArrayInsideIVR.length-1]
+            let lastkey=lastnode.key
+            console.log(lastkey)
+            let ele:any
+            //ele.to=lastnode.key
+            //console.log(ele)
+             that.linkDataArrayInsideIVR.push({
+                from:obj.part.key,
+                to:lastnode.key
+              })
+            console.log("here///////////////////////////////////////")
+            that.typeOfNode.emit({ key: obj.part.key, name: 'Email',nodearray: that.nodeDataArrayInsideIVR,linkarray:that.linkDataArrayInsideIVR})
+    
+            console.log("refreshed///////////////////////////////////////")
         }
+
 
         function addDemographics(e, obj) {
             console.log("email sub");
@@ -571,64 +693,64 @@ export class IvrComponent implements OnInit {
             //         node.addAdornment("mouseHover", nodeHoverAdornment);
             //     }
             // },
-            // {
-            //     contextMenu:     // define a context menu for each node
-            //         $("ContextMenu",  // that has one button
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Email Subscription"),
-            //                 { click: addEmail }
-            //             ),
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Demographics"),
-            //                 { click: addDemographics }
-            //             ),
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Purchase Behaviour"),
-            //                 { click: addPurchase }
-            //             ),
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Customer Engagement"),
-            //                 { click: addCusteng }
-            //             ),
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Model Qualifiers"),
-            //                 { click: addModquan }
-            //             ),
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Geography"),
-            //                 { click: addGeography }
-            //             ),
-            //
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Customer Persona"),
-            //                 { click: addCustper }
-            //             ),
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Pro Attributes"),
-            //                 { click: addProattr }
-            //             ),
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Graph creators"),
-            //                 { click: addGraphcreate }
-            //             ),
-            //
-            //
-            //             $("ContextMenuButton",
-            //                 $(go.TextBlock, "Terminal Node"),
-            //                 { click: addTerminal }
-            //             ),
-            //
-            //             // more ContextMenuButtons would go here
-            //         )  // end Adornment
-            // }
+            {
+                contextMenu:     // define a context menu for each node
+                    $("ContextMenu",  // that has one button
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Email Subscription"),
+                            { click: addEmail }
+                        ),
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Demographics"),
+                            { click: addDemographics }
+                        ),
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Purchase Behaviour"),
+                            { click: addPurchase }
+                        ),
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Customer Engagement"),
+                            { click: addCusteng }
+                        ),
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Model Qualifiers"),
+                            { click: addModquan }
+                        ),
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Geography"),
+                            { click: addGeography }
+                        ),
+            
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Customer Persona"),
+                            { click: addCustper }
+                        ),
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Pro Attributes"),
+                            { click: addProattr }
+                        ),
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Graph creators"),
+                            { click: addGraphcreate }
+                        ),
+            
+            
+                        $("ContextMenuButton",
+                            $(go.TextBlock, "Terminal Node"),
+                            { click: addTerminal }
+                        ),
+            
+                        // more ContextMenuButtons would go here
+                    )  // end Adornment
+            }
 
         );
 
@@ -736,7 +858,7 @@ export class IvrComponent implements OnInit {
         //         { routing: go.Link.Orthogonal, corner: 5 },
         //         $(go.Shape, { strokeWidth: 3, stroke: "#555" })); // the link shape
 
-
+        
         this.palette = new go.Palette();
         this.palette.nodeTemplateMap = this.diagram.nodeTemplateMap;
 
@@ -819,6 +941,8 @@ export class IvrComponent implements OnInit {
                 },
 
             ];
+
+            
     }
 
     // this function changes the category of the node data to cause the Node to be replaced
@@ -1501,6 +1625,52 @@ export class IvrComponent implements OnInit {
     }
     saveasCSV()
     {
+        let node=[]
+        let links=[]
+       // let lenlink=this.linkDataArrayInsideIVR.length
+        this.nodeDataArrayInsideIVR.forEach( element => {
+          
+          node.push(element.key)
+           
+            
+        });
+        this.linkDataArrayInsideIVR.forEach(ele=>{
+            links.push(ele.from)
+            
+        });
+        console.log("nodes",node)
+        console.log("links",links)
+        let leafnodes = node.filter(item => links.indexOf(item) < 0);
+        console.log(leafnodes)
+       let count=0;
+        leafnodes.forEach(ele=>{
+            count=count+1;
+            let name="output - "+count
+            const options = { 
+                fieldSeparator: ',',
+                quoteStrings: '"',
+                decimalSeparator: '.',
+                showLabels: true, 
+                showTitle: true,
+                title: name,
+                useTextFile: false,
+                useBom: true,
+                useKeysAsHeaders: true,
+                // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+              };
+
+            const csvExporter = new ExportToCsv(options);
+            console.log(ele)
+              this.nodeDataArrayInsideIVR.forEach(exp=>{
+                  if(ele==exp.key)
+                  {
+                    console.log(exp)
+                    console.log(exp.filtered)
+                    csvExporter.generateCsv(exp.filtered);
+                  }
+              })
+            
+        })
        // const { Parser } = require('json2csv');
 
     }
